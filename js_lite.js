@@ -494,3 +494,37 @@ function HideToggle(id, CB) {
     if (S(id).display != 'none') Hide(id, CB)
     else Show(id, CB)
 }
+
+function Slide(id, frx, fry, tox, toy, msecs, interruptible, CB) {
+    if (O(id).SL_Flag) {
+        if (!O(id).SL_Int) return
+        else clearInterval(O(id).SL_IID)
+        var len1 = Distance(tox - frx, toy - fry)
+        frx = X(id)
+        fry = Y(id)
+        var len2 = Distance(tox - frx, toy - fry)
+        msecs *= len2 / len1
+    }
+    var stepx = (tox - frx) / (msecs / INTERVAL)
+    var stepy = (toy - fry) / (msecs / INTERVAL)
+    var count = 0
+    O(id).SL_Int = interruptible
+    O(id).SL_Flag = true
+    O(id).SL_IID = setInterval(DoSlide, INTERVAL)
+
+    function Distance(x, y) {
+        x = Math.max(1, x)
+        y = Math.max(1, y)
+        return Math.round(Math.sqrt(Math.abs(x * x) + Math.abs(y * y)))
+    }
+
+    function DoSlide() {
+        GoTo(id, frx + stepx * count, fry + stepy * count)
+        if (count++ >= (msecs / INTERVAL)) {
+            O(id).SL_Flag = false
+            GoTo(id, tox, toy)
+            clearInterval(O(id).SL_IID)
+            if (typeof CB != UNDEF) eval(CB)
+        }
+    }
+}
