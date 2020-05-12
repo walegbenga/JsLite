@@ -394,3 +394,103 @@ function Center(id) {
     CenterX(id)
     CenterY(id)
 }
+
+function Invisible(id) {
+    S(id, 'visibility', HID)
+}
+
+function Visible(id) {
+    S(id, 'visibility', VIS)
+}
+
+function VisibilityToggle(id) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            VisibilityToggle(id[j])
+        return
+    }
+    S(id).visibility = S(id).visibility == HID ? VIS : HID
+}
+
+function Opacity(id, percent) {
+    S(id, 'opacity', percent / 100)
+    S(id, 'MozOpacity', percent / 100)
+    S(id, 'KhtmlOpacity', percent / 100)
+    S(id, 'filter', InsVars("alpha(opacity = '#1')", percent))
+}
+
+function Fade(id, start, end, msecs, interruptible, CB) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            Fade(id[j], start, end, msecs, interruptible, CB)
+        return
+    }
+    var stepval = Math.abs(start - end) / (msecs / INTERVAL)
+    if (O(id).FA_Flag) {
+        if (!O(id).FA_Int) return
+        clearInterval(O(id).FA_IID)
+        O(id).FA_Start = O(id).FA_Level
+    } else {
+        O(id).FA_Start = start
+        O(id).FA_Level = start
+    }
+    O(id).FA_Flag = true
+    O(id).FA_End = end
+    O(id).FA_Int = interruptible
+    O(id).FA_Step = end > O(id).FA_Start ? stepval : -stepval
+    O(id).Fadeout = end < O(id).FA_Start ? true : false
+    O(id).FA_IID = setInterval(DoFade, INTERVAL)
+
+    function DoFade() {
+        O(id).FA_Level += O(id).FA_Step
+        if (O(id).FA_Level >= Math.max(O(id).FA_Start, O(id).FA_End) ||
+            O(id).FA_Level <= Math.min(O(id).FA_Start, O(id).FA_End)) {
+            O(id).FA_Level = O(id).FA_End
+            O(id).FA_Flag = false
+            clearInterval(O(id).FA_IID)
+            if (typeof CB != UNDEF) eval(CB)
+        }
+        Opacity(id, O(id).FA_Level)
+    }
+}
+
+function FadeIn(id, msecs, interruptible, CB) {
+    Fade(id, 0, 100, msecs, interruptible, CB)
+}
+
+function FadeToggle(id, msecs, interruptible, CB) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            FadeToggle(id[j], msecs, interruptible, CB)
+        return
+    }
+    if (O(id).Fadeout) FadeIn(id, msecs, interruptible, CB)
+    else FadeOut(id, msecs, interruptible, CB)
+}
+
+function FadeBetween(id1, id2, msecs, interruptible, CB) {
+    FadeOut(id1, msecs, interruptible, CB)
+    FadeIn(id2, msecs, interruptible, CB)
+}
+
+function Hide(id, CB) {
+    S(id, 'display', 'none')
+    O(id, 'HI_Flag', true)
+    if (typeof CB != UNDEF) eval(CB)
+}
+
+function Show(id, CB) {
+    S(id, 'display', 'block')
+    O(id, 'HI_Flag', false)
+    if (typeof CB != UNDEF) eval(CB)
+}
+
+function HideToggle(id, CB) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            HideToggle(id[j], CB)
+        return
+    }
+    if (S(id).display != 'none') Hide(id, CB)
+    else Show(id, CB)
+}
