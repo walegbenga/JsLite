@@ -295,3 +295,102 @@ function HexDec(n) {
 function DecHex(n) {
     return (n < 16 ? '0' : '') + n.toString(16)
 }
+
+function ResizeWidth(id, width) {
+    S(id, 'overflow', HID)
+    S(id, 'width', Px(width))
+}
+
+function ResizeHeight(id, height) {
+    S(id, 'overflow', HID)
+    S(id, 'height', Px(height))
+}
+
+function Resize(id, width, height) {
+    ResizeWidth(id, width)
+    ResizeHeight(id, height)
+}
+
+function Position(id, type) {
+    S(id, 'position', type)
+}
+
+function GoTo(id, x, y) {
+    S(id, 'left', Px(x))
+    S(id, 'top', Px(y))
+}
+
+function Locate(id, type, x, y) {
+    Position(id, type)
+    GoTo(id, x, y)
+}
+
+function GetWindowWidth() {
+    var de = document.documentElement
+    if (BROWSER != 'IE') {
+        var barwidth = de.scrollHeight > de.clientHeight ? 17 : 0
+        return window.innerWidth - barwidth
+    }
+    return de.clientWidth || document.body.clientWidth
+}
+
+function GetWindowHeight() {
+    var de = document.documentElement
+    if (BROWSER != 'IE') {
+        var barwidth = de.scrollWidth > de.clientWidth ? 17 : 0
+        return window.innerHeight - barwidth
+    }
+    return de.clientHeight || document.body.clientHeight
+}
+
+function GoToEdge(id, where, percent) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            GoToEdge(id[j], where, percent)
+        return
+    }
+    var width = GetWindowWidth() - W(id)
+    var height = GetWindowHeight() - H(id)
+    var amount = percent / 100
+    switch (where) {
+        case TP:
+            var x = width * amount
+            var y = 0
+            break
+        case BM:
+            var x = width * amount
+            var y = height
+            break
+        case LT:
+            var x = 0
+            var y = height * amount
+            break
+        case RT:
+            var x = width
+            var y = height * amount
+    }
+    GoTo(id, x, y)
+}
+
+function CenterX(id) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            CenterX(id[j])
+        return
+    }
+    S(id).left = Px(Math.round((GetWindowWidth() - W(id))) / 2 + SCROLL_X)
+}
+
+function CenterY(id) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            CenterY(id[j])
+        return
+    }
+    S(id).top = Px(Math.round((GetWindowHeight() - H(id))) / 2 + SCROLL_Y)
+}
+
+function Center(id) {
+    CenterX(id)
+    CenterY(id)
+}
