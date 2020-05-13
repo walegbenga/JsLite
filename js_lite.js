@@ -589,3 +589,124 @@ function Deflate(id, w, h, msecs, interruptible, CB) {
         }
     }
 }
+
+function Reflate(id, w, h, msecs, interruptible, CB) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            Reflate(id[j], w, h, msecs, interruptible, CB)
+        return
+    }
+    if (!$l(id).Deflated) return
+    else if ($l(id).DF_Flag) {
+        if (!$l(id).DF_Int) return
+        else clearInterval($l(id).DF_IID)
+    } else $l(id).DF_Count = 0
+    var stepw = $l(id).DF_OldW / (msecs / INTERVAL)
+    var steph = $l(id).DF_OldH / (msecs / INTERVAL)
+    $l(id).DF_Flag = true
+    $l(id).Deflated = false
+    $l(id).DF_Int = interruptible
+    $l(id).DF_IID = setInterval(DoReflate, INTERVAL)
+
+    function DoReflate() {
+        if (w) ResizeWidth(id, stepw * $l(id).DF_Count)
+        if (h) ResizeHeight(id, steph * $l(id).DF_Count)
+        if ($l(id).DF_Count++ >= msecs / INTERVAL) {
+            $l(id).DF_Flag = false
+            if (w) ResizeWidth(id, $l(id).DF_OldW)
+            if (h) ResizeHeight(id, $l(id).DF_OldH)
+            clearInterval($l(id).DF_IID)
+            if (typeof CB != UNDEF) eval(CB)
+        }
+    }
+}
+
+function DeflateToggle(id, w, h, msecs, interruptible, CB) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            DeflateToggle(id[j], w, h, msecs, interruptible, CB)
+        return
+    }
+    if ($l(id).Deflated) Reflate(id, w, h, msecs, interruptible, CB)
+    else Deflate(id, w, h, msecs, interruptible, CB)
+}
+
+function DeflateBetween(id1, id2, w, h, msecs, interruptible, CB) {
+    Deflate(id1, w, h, msecs, interruptible, CB)
+    Reflate(id2, w, h, msecs, interruptible, CB)
+}
+
+function Zoom(id, w, h, fromw, fromh, tow, toh,
+    msecs, pad, interruptible, CB) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            Zoom(id[j], w, h, fromw, fromh, tow, toh,
+                msecs, pad, interruptible, CB)
+        return
+    }
+    if (typeof $l(id).ZO_X == UNDEF) {
+        $l(id).ZO_X = X(id)
+        $l(id).ZO_Y = Y(id)
+    }
+    if (!$l(id).ZO_Flag) {
+        $l(id).ZO_W = Math.max(fromw, tow)
+        $l(id).ZO_H = Math.max(fromh, toh)
+        $l(id).ZO_Count = 0
+    } else {
+        if (!$l(id).ZO_Int) return
+        else clearInterval($l(id).ZO_IID)
+        $l(id).ZO_Count = (msecs / INTERVAL) - $l(id).ZO_Count
+    }
+    var maxw = Math.max(fromw, tow)
+    var maxh = Math.max(fromh, toh)
+    var stepw = (tow - fromw) / (msecs / INTERVAL)
+    var steph = (toh - fromh) / (msecs / INTERVAL)
+    S(id).overflow = HID
+    $l(id).ZO_Flag = true
+    $l(id).ZO_Int = interruptible
+    $l(id).ZO_IID = setInterval(DoZoom, INTERVAL)
+
+    function DoZoom() {
+        if (w) $l(id).ZO_W = Math.round(fromw + stepw * $l(id).ZO_Count)
+        if (h) $l(id).ZO_H = Math.round(fromh + steph * $l(id).ZO_Count)
+        Resize(id, $l(id).ZO_W, $l(id).ZO_H)
+        var midx = $l(id).ZO_X + Math.round((maxw - $l(id).ZO_W) / 2)
+        var midy = $l(id).ZO_Y + Math.round((maxh - $l(id).ZO_H) / 2)
+        if (pad > 0) ZoomPad(Math.max(fromw, tow),
+            Math.max(fromh, toh), $l(id).ZO_W, $l(id).ZO_H)
+        else if (pad != -1) GoTo(id, midx, midy)
+        if ($l(id).DB_Parent)
+            GoToEdge($l(id).DB_Parent, $l(id).DB_Where, 50)
+        if (++$l(id).ZO_Count >= (msecs / INTERVAL)) {
+            var endx = $l(id).ZO_X + Math.round((maxw - tow) / 2)
+            var endy = $l(id).ZO_Y + Math.round((maxh - toh) / 2)
+            $l(id).ZO_Flag = false
+            Resize(id, tow, toh)
+            clearInterval($l(id).ZO_IID)
+            if (pad > 0) ZoomPad(fromw, fromh, tow, toh)
+            else if (pad != -1) GoTo(id, endx, endy)
+            if ($l(id).DB_Parent)
+                GoToEdge($l(id).DB_Parent, $l(id).DB_Where, 50)
+            if (typeof CB != UNDEF) eval(CB)
+        }
+
+        function ZoomPad(frw, frh, padw, padh) {
+            var left = Math.max(0, frw - Math.round(padw)) / 2
+            var right = left
+            var top = Math.max(0, frh - Math.round(padh)) / 2
+            var bottom = top
+            if (left != Math.floor(left)) {
+                left = Math.floor(left)
+                right = left + 1
+            }
+            if (top != Math.floor(top)) {
+                top = Math.floor(top)
+                bottom = top + 1
+            }
+            S(id).paddingLeft = Px(left)
+            S(id).paddingRight = Px(right)
+            S(id).paddingTop = Px(top)
+            S(id).paddingBottom = Px(bottom)
+        }
+    }
+}
