@@ -1,13 +1,13 @@
-function O(id, property, value) {
+function $l(id, property, value) {
     if (id instanceof Array) {
         var tmp = []
         for (var j = 0; j < id.length; ++j)
-            tmp.push(O(id[j], property, value))
+            tmp.push($l(id[j], property, value))
         return tmp
     }
     if (typeof property != UNDEF && typeof value != UNDEF) {
         if (typeof value == 'string') value = "'" + value + "'"
-        return eval("O('" + id + "')." + property + " = " + value)
+        return eval("$l('" + id + "')." + property + " = " + value)
     }
     if (typeof id == 'object') return id
     else {
@@ -23,10 +23,10 @@ function S(id, property, value) {
         return tmp
     }
     if (typeof property != UNDEF && typeof value != UNDEF) {
-        try { return O(id).style[property] = value } catch (e) { alert('PJ - Unknown ID: ' + id) }
+        try { return $l(id).style[property] = value } catch (e) { alert('PJ - Unknown ID: ' + id) }
     } else if (typeof id == 'object') return id.style
     else {
-        try { return O(id).style } catch (e) { alert('PJ - Unknown ID: ' + id) }
+        try { return $l(id).style } catch (e) { alert('PJ - Unknown ID: ' + id) }
     }
 }
 
@@ -166,28 +166,28 @@ function GetLastKey() {
 function PreventAction(id, type, onoff) {
     if (type == 'drag' || type == 'both') {
         if (onoff == true) {
-            if (typeof O(id).ondragstart != UNDEF)
-                O(id).ondragstart = function() { return false }
-            else O(id).onmousedown = function() { return false }
+            if (typeof $l(id).ondragstart != UNDEF)
+                $l(id).ondragstart = function() { return false }
+            else $l(id).onmousedown = function() { return false }
         } else {
-            if (typeof O(id).ondragstart != UNDEF)
-                O(id).ondragstart = ''
-            else O(id).onmousedown = ''
+            if (typeof $l(id).ondragstart != UNDEF)
+                $l(id).ondragstart = ''
+            else $l(id).onmousedown = ''
         }
     }
     if (type == 'select' || type == 'both') {
         if (onoff == true) {
-            if (typeof O(id).onselectstart != UNDEF)
-                O(id).onselectstart = function() { return false }
+            if (typeof $l(id).onselectstart != UNDEF)
+                $l(id).onselectstart = function() { return false }
             else if (typeof S(id).MozUserSelect != UNDEF)
                 S(id).MozUserSelect = 'none'
-            else O(id).onmousedown = function() { return false }
+            else $l(id).onmousedown = function() { return false }
         } else {
-            if (typeof O(id).onselectstart != UNDEF)
-                O(id).onselectstart = ''
+            if (typeof $l(id).onselectstart != UNDEF)
+                $l(id).onselectstart = ''
             else if (typeof S(id).MozUserSelect != UNDEF)
                 S(id).MozUserSelect = 'text'
-            else O(id).onmousedown = ''
+            else $l(id).onmousedown = ''
         }
     }
 }
@@ -201,7 +201,7 @@ function Px(value) {
 }
 
 function X(id) {
-    var obj = O(id)
+    var obj = $l(id)
     var offset = obj.offsetLeft
     if (obj.offsetParent)
         while (obj = obj.offsetParent)
@@ -210,7 +210,7 @@ function X(id) {
 }
 
 function Y(id) {
-    var obj = O(id)
+    var obj = $l(id)
     var offset = obj.offsetTop
     if (obj.offsetParent)
         while (obj = obj.offsetParent)
@@ -219,59 +219,59 @@ function Y(id) {
 }
 
 function W(id) {
-    var width = O(id).offsetWidth +
+    var width = $l(id).offsetWidth +
         NoPx(S(id).marginLeft) +
         NoPx(S(id).marginRight)
     var bord = NoPx(S(id).borderLeftWidth) +
         NoPx(S(id).borderRightWidth)
     if (bord > 0) width -= bord
-    else if (O(id).border) width -= O(id).border * 2
+    else if ($l(id).border) width -= $l(id).border * 2
     return width
 }
 
 function H(id) {
-    var height = O(id).offsetHeight +
+    var height = $l(id).offsetHeight +
         NoPx(S(id).marginTop) +
         NoPx(S(id).marginBottom)
     var bord = NoPx(S(id).borderTopWidth) +
         NoPx(S(id).borderBottomWidth)
     if (bord > 0) height -= bord
-    else if (O(id).border) height -= O(id).border * 2
+    else if ($l(id).border) height -= $l(id).border * 2
     return height
 }
 
 function Html(id, value) {
     if (typeof value != UNDEF)
-        O(id).innerHTML = value
-    return O(id).innerHTML
+        $l(id).innerHTML = value
+    return $l(id).innerHTML
 }
 
 function SaveState(id) {
-    O(id).Save_left = S(id).left
-    O(id).Save_top = S(id).top
-    O(id).Save_visibility = S(id).visibility
-    O(id).Save_color = S(id).color
-    O(id).Save_backgroundColor = S(id).backgroundColor
-    O(id).Save_display = S(id).display
-    O(id).Save_opacity = S(id).opacity
-    O(id).Save_MozOpacity = S(id).MozOpacity
-    O(id).Save_KhtmlOpacity = S(id).KhtmlOpacity
-    O(id).Save_filter = S(id).filter
-    O(id).Save_zIndex = S(id).zIndex
+    $l(id).Save_left = S(id).left
+    $l(id).Save_top = S(id).top
+    $l(id).Save_visibility = S(id).visibility
+    $l(id).Save_color = S(id).color
+    $l(id).Save_backgroundColor = S(id).backgroundColor
+    $l(id).Save_display = S(id).display
+    $l(id).Save_opacity = S(id).opacity
+    $l(id).Save_MozOpacity = S(id).MozOpacity
+    $l(id).Save_KhtmlOpacity = S(id).KhtmlOpacity
+    $l(id).Save_filter = S(id).filter
+    $l(id).Save_zIndex = S(id).zIndex
 }
 
 function RestoreState(id) {
-    S(id).left = O(id).Save_left
-    S(id).top = O(id).Save_top
-    S(id).visibility = O(id).Save_visibility
-    S(id).color = O(id).Save_color
-    S(id).backgroundColor = O(id).Save_backgroundColor
-    S(id).display = O(id).Save_display
-    S(id).opacity = O(id).Save_opacity
-    S(id).MozOpacity = O(id).Save_MozOpacity
-    S(id).KhtmlOpacity = O(id).Save_KhtmlOpacity
-    S(id).filter = O(id).Save_filter
-    S(id).zIndex = O(id).Save_zIndex
+    S(id).left = $l(id).Save_left
+    S(id).top = $l(id).Save_top
+    S(id).visibility = $l(id).Save_visibility
+    S(id).color = $l(id).Save_color
+    S(id).backgroundColor = $l(id).Save_backgroundColor
+    S(id).display = $l(id).Save_display
+    S(id).opacity = $l(id).Save_opacity
+    S(id).MozOpacity = $l(id).Save_MozOpacity
+    S(id).KhtmlOpacity = $l(id).Save_KhtmlOpacity
+    S(id).filter = $l(id).Save_filter
+    S(id).zIndex = $l(id).Save_zIndex
 }
 
 function InsVars() {
@@ -426,31 +426,31 @@ function Fade(id, start, end, msecs, interruptible, CB) {
         return
     }
     var stepval = Math.abs(start - end) / (msecs / INTERVAL)
-    if (O(id).FA_Flag) {
-        if (!O(id).FA_Int) return
-        clearInterval(O(id).FA_IID)
-        O(id).FA_Start = O(id).FA_Level
+    if ($l(id).FA_Flag) {
+        if (!$l(id).FA_Int) return
+        clearInterval($l(id).FA_IID)
+        $l(id).FA_Start = $l(id).FA_Level
     } else {
-        O(id).FA_Start = start
-        O(id).FA_Level = start
+        $l(id).FA_Start = start
+        $l(id).FA_Level = start
     }
-    O(id).FA_Flag = true
-    O(id).FA_End = end
-    O(id).FA_Int = interruptible
-    O(id).FA_Step = end > O(id).FA_Start ? stepval : -stepval
-    O(id).Fadeout = end < O(id).FA_Start ? true : false
-    O(id).FA_IID = setInterval(DoFade, INTERVAL)
+    $l(id).FA_Flag = true
+    $l(id).FA_End = end
+    $l(id).FA_Int = interruptible
+    $l(id).FA_Step = end > $l(id).FA_Start ? stepval : -stepval
+    $l(id).Fadeout = end < $l(id).FA_Start ? true : false
+    $l(id).FA_IID = setInterval(DoFade, INTERVAL)
 
     function DoFade() {
-        O(id).FA_Level += O(id).FA_Step
-        if (O(id).FA_Level >= Math.max(O(id).FA_Start, O(id).FA_End) ||
-            O(id).FA_Level <= Math.min(O(id).FA_Start, O(id).FA_End)) {
-            O(id).FA_Level = O(id).FA_End
-            O(id).FA_Flag = false
-            clearInterval(O(id).FA_IID)
+        $l(id).FA_Level += $l(id).FA_Step
+        if ($l(id).FA_Level >= Math.max($l(id).FA_Start, $l(id).FA_End) ||
+            $l(id).FA_Level <= Math.min($l(id).FA_Start, $l(id).FA_End)) {
+            $l(id).FA_Level = $l(id).FA_End
+            $l(id).FA_Flag = false
+            clearInterval($l(id).FA_IID)
             if (typeof CB != UNDEF) eval(CB)
         }
-        Opacity(id, O(id).FA_Level)
+        Opacity(id, $l(id).FA_Level)
     }
 }
 
@@ -464,7 +464,7 @@ function FadeToggle(id, msecs, interruptible, CB) {
             FadeToggle(id[j], msecs, interruptible, CB)
         return
     }
-    if (O(id).Fadeout) FadeIn(id, msecs, interruptible, CB)
+    if ($l(id).Fadeout) FadeIn(id, msecs, interruptible, CB)
     else FadeOut(id, msecs, interruptible, CB)
 }
 
@@ -475,13 +475,13 @@ function FadeBetween(id1, id2, msecs, interruptible, CB) {
 
 function Hide(id, CB) {
     S(id, 'display', 'none')
-    O(id, 'HI_Flag', true)
+    $l(id, 'HI_Flag', true)
     if (typeof CB != UNDEF) eval(CB)
 }
 
 function Show(id, CB) {
     S(id, 'display', 'block')
-    O(id, 'HI_Flag', false)
+    $l(id, 'HI_Flag', false)
     if (typeof CB != UNDEF) eval(CB)
 }
 
@@ -496,9 +496,9 @@ function HideToggle(id, CB) {
 }
 
 function Slide(id, frx, fry, tox, toy, msecs, interruptible, CB) {
-    if (O(id).SL_Flag) {
-        if (!O(id).SL_Int) return
-        else clearInterval(O(id).SL_IID)
+    if ($l(id).SL_Flag) {
+        if (!$l(id).SL_Int) return
+        else clearInterval($l(id).SL_IID)
         var len1 = Distance(tox - frx, toy - fry)
         frx = X(id)
         fry = Y(id)
@@ -508,9 +508,9 @@ function Slide(id, frx, fry, tox, toy, msecs, interruptible, CB) {
     var stepx = (tox - frx) / (msecs / INTERVAL)
     var stepy = (toy - fry) / (msecs / INTERVAL)
     var count = 0
-    O(id).SL_Int = interruptible
-    O(id).SL_Flag = true
-    O(id).SL_IID = setInterval(DoSlide, INTERVAL)
+    $l(id).SL_Int = interruptible
+    $l(id).SL_Flag = true
+    $l(id).SL_IID = setInterval(DoSlide, INTERVAL)
 
     function Distance(x, y) {
         x = Math.max(1, x)
@@ -521,34 +521,71 @@ function Slide(id, frx, fry, tox, toy, msecs, interruptible, CB) {
     function DoSlide() {
         GoTo(id, frx + stepx * count, fry + stepy * count)
         if (count++ >= (msecs / INTERVAL)) {
-            O(id).SL_Flag = false
+            $l(id).SL_Flag = false
             GoTo(id, tox, toy)
-            clearInterval(O(id).SL_IID)
+            clearInterval($l(id).SL_IID)
             if (typeof CB != UNDEF) eval(CB)
         }
     }
 }
 
 function SlideBetween(id1, id2, msecs, interruptible, CB) {
-    if (O(id1).SL_Flag || O(id2).SL_Flag) {
-        if (!O(id1).SL_Int || !O(id2).SL_Int)
+    if ($l(id1).SL_Flag || $l(id2).SL_Flag) {
+        if (!$l(id1).SL_Int || !$l(id2).SL_Int)
             return
-        var t1 = O(id1).SB_X
-        var t2 = O(id1).SB_Y
-        O(id1).SB_X = O(id2).SB_X
-        O(id1).SB_Y = O(id2).SB_Y
-        O(id2).SB_X = t1
-        O(id2).SB_Y = t2
+        var t1 = $l(id1).SB_X
+        var t2 = $l(id1).SB_Y
+        $l(id1).SB_X = $l(id2).SB_X
+        $l(id1).SB_Y = $l(id2).SB_Y
+        $l(id2).SB_X = t1
+        $l(id2).SB_Y = t2
     } else {
-        O(id1).SB_X = X(id1)
-        O(id1).SB_Y = Y(id1)
-        O(id2).SB_X = X(id2)
-        O(id2).SB_Y = Y(id2)
+        $l(id1).SB_X = X(id1)
+        $l(id1).SB_Y = Y(id1)
+        $l(id2).SB_X = X(id2)
+        $l(id2).SB_Y = Y(id2)
     }
-    var x1 = O(id1).SB_X
-    var y1 = O(id1).SB_Y
-    var x2 = O(id2).SB_X
-    var y2 = O(id2).SB_Y
+    var x1 = $l(id1).SB_X
+    var y1 = $l(id1).SB_Y
+    var x2 = $l(id2).SB_X
+    var y2 = $l(id2).SB_Y
     Slide(id1, x1, y1, x2, y2, msecs, interruptible, CB)
     Slide(id2, x2, y2, x1, y1, msecs, interruptible, CB)
+}
+
+function Deflate(id, w, h, msecs, interruptible, CB) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            Deflate(id[j], w, h, msecs, interruptible, CB)
+        return
+    }
+    if (!w) ResizeWidth(id, W(id))
+    if (!h) ResizeHeight(id, H(id))
+    if ($l(id).DF_Flag) {
+        if (!$l(id).DF_Int) return
+        else clearInterval($l(id).DF_IID)
+    } else {
+        if (w) $l(id).DF_OldW = W(id)
+        if (h) $l(id).DF_OldH = H(id)
+        $l(id).DF_Count = msecs / INTERVAL
+    }
+    var stepw = $l(id).DF_OldW / (msecs / INTERVAL)
+    var steph = $l(id).DF_OldH / (msecs / INTERVAL)
+    S(id).overflow = HID
+    $l(id).Deflated = true
+    $l(id).DF_Flag = true
+    $l(id).DF_Int = interruptible
+    $l(id).DF_IID = setInterval(DoDeflate, INTERVAL)
+
+    function DoDeflate() {
+        if (w) ResizeWidth(id, stepw * $l(id).DF_Count)
+        if (h) ResizeHeight(id, steph * $l(id).DF_Count)
+        if ($l(id).DF_Count-- < 1) {
+            $l(id).DF_Flag = false
+            if (w) ResizeWidth(id, 0)
+            if (h) ResizeHeight(id, 0)
+            clearInterval($l(id).DF_IID)
+            if (typeof CB != UNDEF) eval(CB)
+        }
+    }
 }
