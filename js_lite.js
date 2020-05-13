@@ -729,3 +729,27 @@ function ZoomDown(id, w, h, msecs, pad, interruptible, CB) {
     Zoom(id, w, h, $l(id).ZO_OldW, $l(id).ZO_OldH, 0, 0,
         msecs, pad, interruptible, CB)
 }
+
+function ZoomRestore(id, w, h, msecs, pad, interruptible, CB) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            ZoomRestore(id[j], w, h, msecs, pad, interruptible, CB)
+        return
+    }
+    if (($l(id).ZO_Flag && !$l(id).ZO_Int) || !$l(id).Zoomdown)
+        return
+    $l(id).Zoomdown = false
+    Zoom(id, w, h, 0, 0, $l(id).ZO_OldW, $l(id).ZO_OldH,
+        msecs, pad, interruptible, CB)
+}
+
+function ZoomToggle(id, w, h, msecs, pad, interruptible, CB) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            ZoomToggle(id[j], w, h, msecs, pad, interruptible, CB)
+        return
+    }
+    if ($l(id).ZO_Flag && !$l(id).ZO_Int) return
+    if (!$l(id).Zoomdown) ZoomDown(id, w, h, msecs, pad, interruptible, CB)
+    else ZoomRestore(id, w, h, msecs, pad, interruptible, CB)
+}
