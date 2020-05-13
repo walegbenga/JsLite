@@ -710,3 +710,22 @@ function Zoom(id, w, h, fromw, fromh, tow, toh,
         }
     }
 }
+
+function ZoomDown(id, w, h, msecs, pad, interruptible, CB) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            ZoomDown(id[j], w, h, msecs, pad, interruptible, CB)
+        return
+    }
+    if ($l(id).ZO_Flag && !$l(id).ZO_Int) return
+    else if (!$l(id).ZO_OldW) {
+        $l(id).ZO_OldW = W(id)
+        $l(id).ZO_OldH = H(id)
+        $l(id).ZO_X = X(id)
+        $l(id).ZO_Y = Y(id)
+    }
+    $l(id).Zoomdown = true
+    GoTo(id, $l(id).ZO_X, $l(id).ZO_Y)
+    Zoom(id, w, h, $l(id).ZO_OldW, $l(id).ZO_OldH, 0, 0,
+        msecs, pad, interruptible, CB)
+}
