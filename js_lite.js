@@ -528,3 +528,27 @@ function Slide(id, frx, fry, tox, toy, msecs, interruptible, CB) {
         }
     }
 }
+
+function SlideBetween(id1, id2, msecs, interruptible, CB) {
+    if (O(id1).SL_Flag || O(id2).SL_Flag) {
+        if (!O(id1).SL_Int || !O(id2).SL_Int)
+            return
+        var t1 = O(id1).SB_X
+        var t2 = O(id1).SB_Y
+        O(id1).SB_X = O(id2).SB_X
+        O(id1).SB_Y = O(id2).SB_Y
+        O(id2).SB_X = t1
+        O(id2).SB_Y = t2
+    } else {
+        O(id1).SB_X = X(id1)
+        O(id1).SB_Y = Y(id1)
+        O(id2).SB_X = X(id2)
+        O(id2).SB_Y = Y(id2)
+    }
+    var x1 = O(id1).SB_X
+    var y1 = O(id1).SB_Y
+    var x2 = O(id2).SB_X
+    var y2 = O(id2).SB_Y
+    Slide(id1, x1, y1, x2, y2, msecs, interruptible, CB)
+    Slide(id2, x2, y2, x1, y1, msecs, interruptible, CB)
+}
