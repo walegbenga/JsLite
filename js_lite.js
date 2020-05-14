@@ -888,3 +888,28 @@ function HoverSlide(id, where, offset, showing, msecs) {
         }
     }
 }
+
+function HoverSlideMenu(ids, where, offset, showing, gap, msecs) {
+    var len = ids.length
+    var total = gap * (len - 1)
+    var start = (offset[0] != '%') ? 0 : offset.substr(1) / 100
+    var a = []
+    var jump = 0
+    if (where == TP || where == BM) {
+        for (var j = 0; j < len; ++j) {
+            a[j] = W(ids[j])
+            total += a[j]
+        }
+        start = start ? (GetWindowWidth() - total) * start : offset * 1
+    } else {
+        for (var j = 0; j < len; ++j) {
+            a[j] = H(ids[j])
+            total += a[j]
+        }
+        start = start ? (GetWindowHeight() - total) * start : offset * 1
+    }
+    for (var j = 0; j < len; ++j) {
+        HoverSlide(ids[j], where, start + jump, showing, msecs)
+        jump += a[j] + gap
+    }
+}
