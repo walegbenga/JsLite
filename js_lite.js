@@ -955,8 +955,8 @@ function PopToggle(id, type, w, h, msecs, interruptible) {
             PopToggle(id[j], type, w, h, msecs, interruptible)
         return
     }
-    if (typeof O(id).PO_IsUp == UNDEF)
-        O(id).PO_IsUp = true
-    if (O(id).PO_IsUp) PopDown(id, type, w, h, msecs, interruptible)
+    if (typeof $l(id).PO_IsUp == UNDEF)
+        $l(id).PO_IsUp = true
+    if ($l(id).PO_IsUp) PopDown(id, type, w, h, msecs, interruptible)
     else PopUp(id, type, w, h, msecs, interruptible)
 }
