@@ -753,3 +753,49 @@ function ZoomToggle(id, w, h, msecs, pad, interruptible, CB) {
     if (!$l(id).Zoomdown) ZoomDown(id, w, h, msecs, pad, interruptible, CB)
     else ZoomRestore(id, w, h, msecs, pad, interruptible, CB)
 }
+
+function Chain(calls) {
+    for (var j = calls.length; j >= 0; --j)
+        if (calls[j])
+            CHAIN_CALLS.push(calls[j])
+    NextInChain()
+}
+
+function NextInChain() {
+    if (CHAIN_CALLS.length)
+        CallBack(CHAIN_CALLS.pop())
+}
+
+function CallBack(expr) {
+    var insert = expr.lastIndexOf(')')
+    var left = expr.substr(0, insert)
+    var right = expr.substr(insert)
+    var middle = "'NextInChain()'"
+
+    if (expr.substr(insert - 1, 1) != '(')
+        middle = ', ' + middle
+    eval(left + middle + right)
+}
+
+function ChainThis(expr) {
+    eval(expr)
+    NextInChain()
+}
+
+function Repeat(number, calls) {
+    var temp = calls
+    for (var j = 1; j < number; ++j)
+        calls = calls.concat(temp)
+    Chain(calls)
+}
+
+function While(expr, calls) {
+    if (eval(expr)) {
+        var temp = ''
+        for (var j = 0; j < calls.length; ++j)
+            temp += '"' + calls[j].replace(/"/g, '\\\"') + '",'
+        temp = temp.substr(0, temp.length - 1)
+        calls.push(InsVars("While('#1', Array(#2))", expr, temp))
+        Chain(calls)
+    }
+}
