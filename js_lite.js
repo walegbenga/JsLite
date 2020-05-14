@@ -813,3 +813,18 @@ function WaitKey() {
         else setTimeout(DoWaitKey, INTERVAL)
     }
 }
+
+function Flip(id1, id2, w, h, msecs, pad) {
+    if (O(id1).ZO_Flag || O(id2).ZO_Flag) return
+    var swap = "ChainThis('VisibilityToggle(\"#1\")')"
+    var fast = "ZoomToggle('#1', #2, #3, 1, #4, 0)"
+    var slow = "ZoomToggle('#1', #2, #3, #4, #5, 0)"
+    Chain(Array(
+        InsVars(slow, id1, w, h, msecs / 2, pad),
+        InsVars(fast, id2, w, h, pad),
+        InsVars(swap, id2),
+        InsVars(slow, id2, w, h, msecs / 2, pad),
+        InsVars(swap, id1),
+        InsVars(fast, id1, w, h, pad)
+    ))
+}
