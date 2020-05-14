@@ -799,3 +799,7 @@ function While(expr, calls) {
         Chain(calls)
     }
 }
+
+function Pause(wait) {
+    setTimeout("NextInChain()", wait)
+}
