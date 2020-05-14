@@ -847,26 +847,26 @@ function HoverSlide(id, where, offset, showing, msecs) {
         var s = t / u
     }
     GoTo(id, x, y)
-    O(id).HS_X = x
-    O(id).HS_Y = y
-    O(id).onmouseover = SlideIn
-    O(id).onmouseout = SlideOut
+    $l(id).HS_X = x
+    $l(id).HS_Y = y
+    $l(id).onmouseover = SlideIn
+    $l(id).onmouseout = SlideOut
 
     function SlideIn() {
-        if (O(id).HS_IID) clearInterval(O(id).HS_IID)
-        O(id).HS_IID = setInterval(DoSlideIn, INTERVAL)
+        if ($l(id).HS_IID) clearInterval($l(id).HS_IID)
+        $l(id).HS_IID = setInterval(DoSlideIn, INTERVAL)
 
         function DoSlideIn() {
-            var ox = O(id).HS_X
-            var oy = O(id).HS_Y
+            var ox = $l(id).HS_X
+            var oy = $l(id).HS_Y
             if (where == TP && oy < 0) oy = Math.min(0, oy + s)
             else if (where == BM && oy > h) oy = Math.max(h, oy - s)
             else if (where == LT && ox < 0) ox = Math.min(0, ox + s)
             else if (where == RT && ox > w) ox = Math.max(w, ox - s)
-            else clearInterval(O(id).HS_IID)
+            else clearInterval($l(id).HS_IID)
             GoTo(id, ox, oy)
-            O(id).HS_X = ox
-            O(id).HS_Y = oy
+            $l(id).HS_X = ox
+            $l(id).HS_Y = oy
         }
     }
 
