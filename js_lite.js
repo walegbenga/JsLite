@@ -932,3 +932,19 @@ function PopDown(id, type, w, h, msecs, interruptible) {
     } else if (type == 'instant') Hide(id)
     $l(id).PO_IsUp = false
 }
+
+function PopUp(id, type, w, h, msecs, interruptible) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            PopUp(id[j], type, w, h, msecs, interruptible)
+        return
+    }
+    Show(id)
+    if (type == 'fade')
+        FadeIn(id, msecs, interruptible)
+    else if (type == 'inflate')
+        Reflate(id, w, h, msecs, interruptible)
+    else if (type == 'zoom')
+        ZoomRestore(id, w, h, msecs, 1, interruptible)
+    O(id).PO_IsUp = true
+}
