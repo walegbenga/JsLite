@@ -946,5 +946,5 @@ function PopUp(id, type, w, h, msecs, interruptible) {
         Reflate(id, w, h, msecs, interruptible)
     else if (type == 'zoom')
         ZoomRestore(id, w, h, msecs, 1, interruptible)
-    O(id).PO_IsUp = true
+    $l(id).PO_IsUp = true
 }
