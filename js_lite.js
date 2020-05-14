@@ -815,7 +815,7 @@ function WaitKey() {
 }
 
 function Flip(id1, id2, w, h, msecs, pad) {
-    if (O(id1).ZO_Flag || O(id2).ZO_Flag) return
+    if ($l(id1).ZO_Flag || O(id2).ZO_Flag) return
     var swap = "ChainThis('VisibilityToggle(\"#1\")')"
     var fast = "ZoomToggle('#1', #2, #3, 1, #4, 0)"
     var slow = "ZoomToggle('#1', #2, #3, #4, #5, 0)"
@@ -827,4 +827,64 @@ function Flip(id1, id2, w, h, msecs, pad) {
         InsVars(swap, id1),
         InsVars(fast, id1, w, h, pad)
     ))
+}
+
+function HoverSlide(id, where, offset, showing, msecs) {
+    var w = GetWindowWidth() - W(id)
+    var h = GetWindowHeight() - H(id)
+    var o = offset[0] != '%' ? 0 : offset.substr(1) / 100
+    if (where == LT || where == RT) {
+        var t = W(id) - showing
+        var u = Math.min(t, msecs / INTERVAL)
+        var x = where == LT ? -t : w + t
+        var y = o ? h * o : offset
+        var s = t / u
+    } else {
+        var t = H(id) - showing
+        var u = Math.min(t, msecs / INTERVAL)
+        var x = o ? w * o : offset
+        var y = where == TP ? -t : h + t
+        var s = t / u
+    }
+    GoTo(id, x, y)
+    O(id).HS_X = x
+    O(id).HS_Y = y
+    O(id).onmouseover = SlideIn
+    O(id).onmouseout = SlideOut
+
+    function SlideIn() {
+        if (O(id).HS_IID) clearInterval(O(id).HS_IID)
+        O(id).HS_IID = setInterval(DoSlideIn, INTERVAL)
+
+        function DoSlideIn() {
+            var ox = O(id).HS_X
+            var oy = O(id).HS_Y
+            if (where == TP && oy < 0) oy = Math.min(0, oy + s)
+            else if (where == BM && oy > h) oy = Math.max(h, oy - s)
+            else if (where == LT && ox < 0) ox = Math.min(0, ox + s)
+            else if (where == RT && ox > w) ox = Math.max(w, ox - s)
+            else clearInterval(O(id).HS_IID)
+            GoTo(id, ox, oy)
+            O(id).HS_X = ox
+            O(id).HS_Y = oy
+        }
+    }
+
+    function SlideOut() {
+        if (O(id).HS_IID) clearInterval(O(id).HS_IID)
+        O(id).HS_IID = setInterval(DoSlideOut, INTERVAL)
+
+        function DoSlideOut() {
+            var ox = O(id).HS_X
+            var oy = O(id).HS_Y
+            if (where == TP && oy > y) oy = Math.max(y, oy - s)
+            else if (where == BM && oy < y) oy = Math.min(y, oy + s)
+            else if (where == LT && ox > x) ox = Math.max(x, ox - s)
+            else if (where == RT && ox < x) ox = Math.max(x, ox + s)
+            else clearInterval(O(id).HS_IID)
+            GoTo(id, ox, oy)
+            O(id).HS_X = ox
+            O(id).HS_Y = oy
+        }
+    }
 }
