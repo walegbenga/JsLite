@@ -948,3 +948,15 @@ function PopUp(id, type, w, h, msecs, interruptible) {
         ZoomRestore(id, w, h, msecs, 1, interruptible)
     $l(id).PO_IsUp = true
 }
+
+function PopToggle(id, type, w, h, msecs, interruptible) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            PopToggle(id[j], type, w, h, msecs, interruptible)
+        return
+    }
+    if (typeof O(id).PO_IsUp == UNDEF)
+        O(id).PO_IsUp = true
+    if (O(id).PO_IsUp) PopDown(id, type, w, h, msecs, interruptible)
+    else PopUp(id, type, w, h, msecs, interruptible)
+}
