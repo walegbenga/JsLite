@@ -913,3 +913,22 @@ function HoverSlideMenu(ids, where, offset, showing, gap, msecs) {
         jump += a[j] + gap
     }
 }
+
+function PopDown(id, type, w, h, msecs, interruptible) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            PopDown(id[j], type, w, h, msecs, interruptible)
+        return
+    }
+    if (type == 'fade') {
+        FadeOut(id, msecs, interruptible,
+            InsVars("Hide('#1')", id))
+    } else if (type == 'inflate') {
+        Deflate(id, w, h, msecs, interruptible,
+            InsVars("Hide('#1')", id))
+    } else if (type == 'zoom') {
+        ZoomDown(id, w, h, msecs, 1, interruptible,
+            InsVars("Hide('#1')", id))
+    } else if (type == 'instant') Hide(id)
+    O(id).PO_IsUp = false
+}
