@@ -815,7 +815,7 @@ function WaitKey() {
 }
 
 function Flip(id1, id2, w, h, msecs, pad) {
-    if ($l(id1).ZO_Flag || O(id2).ZO_Flag) return
+    if ($l(id1).ZO_Flag || $l(id2).ZO_Flag) return
     var swap = "ChainThis('VisibilityToggle(\"#1\")')"
     var fast = "ZoomToggle('#1', #2, #3, 1, #4, 0)"
     var slow = "ZoomToggle('#1', #2, #3, #4, #5, 0)"
@@ -871,20 +871,20 @@ function HoverSlide(id, where, offset, showing, msecs) {
     }
 
     function SlideOut() {
-        if (O(id).HS_IID) clearInterval(O(id).HS_IID)
-        O(id).HS_IID = setInterval(DoSlideOut, INTERVAL)
+        if ($l(id).HS_IID) clearInterval($l(id).HS_IID)
+        $l(id).HS_IID = setInterval(DoSlideOut, INTERVAL)
 
         function DoSlideOut() {
-            var ox = O(id).HS_X
-            var oy = O(id).HS_Y
+            var ox = $l(id).HS_X
+            var oy = $l(id).HS_Y
             if (where == TP && oy > y) oy = Math.max(y, oy - s)
             else if (where == BM && oy < y) oy = Math.min(y, oy + s)
             else if (where == LT && ox > x) ox = Math.max(x, ox - s)
             else if (where == RT && ox < x) ox = Math.max(x, ox + s)
-            else clearInterval(O(id).HS_IID)
+            else clearInterval($l(id).HS_IID)
             GoTo(id, ox, oy)
-            O(id).HS_X = ox
-            O(id).HS_Y = oy
+            $l(id).HS_X = ox
+            $l(id).HS_Y = oy
         }
     }
 }
@@ -930,5 +930,5 @@ function PopDown(id, type, w, h, msecs, interruptible) {
         ZoomDown(id, w, h, msecs, 1, interruptible,
             InsVars("Hide('#1')", id))
     } else if (type == 'instant') Hide(id)
-    O(id).PO_IsUp = false
+    $l(id).PO_IsUp = false
 }
