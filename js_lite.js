@@ -803,3 +803,13 @@ function While(expr, calls) {
 function Pause(wait) {
     setTimeout("NextInChain()", wait)
 }
+
+function WaitKey() {
+    GetLastKey()
+    setTimeout(DoWaitKey, INTERVAL)
+
+    function DoWaitKey() {
+        if (KEY_PRESS != '') NextInChain()
+        else setTimeout(DoWaitKey, INTERVAL)
+    }
+}
