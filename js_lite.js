@@ -1071,9 +1071,9 @@ function BrowserWindow(id, headerid, closeid, x, y, bounds,
     var popupw = W(id)
     var popuph = H(id)
     S(closeid).cursor = 'pointer'
-    O(id).onclick = BWToFront
-    O(closeid).onclick = BWCloseWindow
-    O(headerid).onmousedown = BWMove
+    $l(id).onclick = BWToFront
+    $l(closeid).onclick = BWCloseWindow
+    $l(headerid).onmousedown = BWMove
     PreventAction(headerid, 'select', true)
     PreventAction(closeid, 'select', true)
 
