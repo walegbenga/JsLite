@@ -1010,3 +1010,32 @@ function ContextMenu(id, contents, type, w, h, msecs) {
         }
     }
 }
+
+function RollOver(ro1, ro2) {
+    if (ro1 instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            RollOver(ro1[j], ro2[j])
+        return
+    }
+    var a = Array(ro1, ro2)
+    var w = W(ro1) + 1
+    var h = H(ro1) + 1
+    var x = X(ro1)
+    var y = Y(ro1)
+    Hide(ro2)
+    Locate(a, REL, 0, 0)
+    O(ro1).onmouseover = DoRoll
+
+    function DoRoll() {
+        HideToggle(a)
+        var iid = setInterval(RollCheck, INTERVAL)
+
+        function RollCheck() {
+            if (MOUSE_X < x || MOUSE_X > x + w ||
+                MOUSE_Y < y || MOUSE_Y > y + h) {
+                HideToggle(a)
+                clearInterval(iid)
+            }
+        }
+    }
+}
