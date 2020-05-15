@@ -1039,3 +1039,21 @@ function RollOver(ro1, ro2) {
         }
     }
 }
+
+function Breadcrumbs(spacer) {
+    var parts = self.location.href.split('?')[0].split('/')
+    var crumbs = Array(parts[0] + '//')
+    for (var j = 2; j < parts.length; ++j) {
+        if (parts[j] == '') crumbs[0] += '/'
+        else crumbs.push(parts[j])
+    }
+    var title = document.title ? document.title : parts[j - 1]
+    var url = crumbs[0] + crumbs[1]
+    var display = InsVars("<a href='#1'>Home</a>", url)
+    if (typeof spacer == UNDEF) gap = ' '
+    for (j = 2; j < crumbs.length - 1; ++j) {
+        url += '/' + crumbs[j]
+        display += spacer + InsVars("<a href='#1'>#2</a>", url, crumbs[j])
+    }
+    return display + spacer + title
+}
