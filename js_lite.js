@@ -984,3 +984,29 @@ function FoldingMenu(headings, contents, action, type, multi,
         }
     }
 }
+
+function ContextMenu(id, contents, type, w, h, msecs) {
+    Locate(contents, ABS, -10000, -10000)
+    PopDown(contents, type, 1, 1, 1, 0)
+    $l(id).oncontextmenu = ContextUp
+
+    function ContextUp() {
+        if ($l(contents).PO_IsUp || $l(contents).FA_Flag || $l(contents).DF_Flag) return false
+        var x = MOUSE_X
+        var y = MOUSE_Y
+        GoTo(contents, x, y)
+        PopUp(contents, type, w, h, msecs, 1)
+        S(contents).zIndex = ZINDEX + 1
+        $l(id).Context_IID = setInterval(ContextDown, INTERVAL)
+        return false
+
+        function ContextDown() {
+            if (MOUSE_X < x || MOUSE_X > (x + W(contents)) ||
+                MOUSE_Y < y || MOUSE_Y > (y + H(contents))) {
+                PopDown(contents, type, w, h, msecs, 1)
+                clearInterval($l(id).Context_IID)
+                $l(contents).PO_IsUp = false
+            }
+        }
+    }
+}
