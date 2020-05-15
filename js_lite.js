@@ -964,22 +964,22 @@ function PopToggle(id, type, w, h, msecs, interruptible) {
 function FoldingMenu(headings, contents, action, type, multi,
     w, h, msecs1, msecs2, interruptible) {
     PopDown(contents.slice(1), type, w, h, 1, 0)
-    O(contents[0]).PO_IsUp = true
+    $l(contents[0]).PO_IsUp = true
     for (var j = 0; j < headings.length; ++j) {
-        O(headings[j]).FO_C = contents[j]
+        $l(headings[j]).FO_C = contents[j]
         S(headings[j]).cursor = 'pointer'
-        if (action == 'hover') O(headings[j]).onmouseover = DoFoldingMenu
-        else O(headings[j]).onclick = DoFoldingMenu
+        if (action == 'hover') $l(headings[j]).onmouseover = DoFoldingMenu
+        else $l(headings[j]).onclick = DoFoldingMenu
     }
 
     function DoFoldingMenu() {
         if (multi) PopToggle(this.FO_C, type, w, h, msecs1, interruptible)
         else {
             for (j = 0; j < headings.length; ++j)
-                if (O(O(headings[j]).FO_C).PO_IsUp && O(headings[j]) != this)
-                    PopDown(O(headings[j]).FO_C, type, w, h,
+                if ($l($l(headings[j]).FO_C).PO_IsUp && $l(headings[j]) != this)
+                    PopDown($l(headings[j]).FO_C, type, w, h,
                         msecs1, interruptible)
-            if (!O(this.FO_C).PO_IsUp)
+            if (!$l(this.FO_C).PO_IsUp)
                 PopUp(this.FO_C, type, w, h, msecs2, interruptible)
         }
     }
