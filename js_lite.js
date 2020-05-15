@@ -1057,3 +1057,57 @@ function Breadcrumbs(spacer) {
     }
     return display + spacer + title
 }
+
+function BrowserWindow(id, headerid, closeid, x, y, bounds,
+    type, w, h, msecs, interruptible) {
+    GoTo(id, x, y)
+    PopUp(id, type, w, h, msecs, interruptible)
+    var browserw = GetWindowWidth()
+    var browserh = GetWindowHeight()
+    var borderw = NoPx(S(id).borderLeftWidth) +
+        NoPx(S(id).borderRightWidth)
+    var borderh = NoPx(S(id).borderTopWidth) +
+        NoPx(S(id).borderBottomWidth)
+    var popupw = W(id)
+    var popuph = H(id)
+    S(closeid).cursor = 'pointer'
+    O(id).onclick = BWToFront
+    O(closeid).onclick = BWCloseWindow
+    O(headerid).onmousedown = BWMove
+    PreventAction(headerid, 'select', true)
+    PreventAction(closeid, 'select', true)
+
+    function BWToFront() {
+        S(id).zIndex = ++ZINDEX
+    }
+
+    function BWCloseWindow() {
+        PopDown(id, type, w, h, msecs, interruptible)
+    }
+
+    function BWMove() {
+        BWToFront()
+        S(headerid).cursor = 'move'
+        var xoffset = MOUSE_X - X(id)
+        var yoffset = MOUSE_Y - Y(id)
+        var iid = setInterval(DoBWMove, 10)
+
+        function DoBWMove() {
+            var x = MOUSE_X - xoffset
+            var y = MOUSE_Y - yoffset
+            if (bounds) {
+                var r = browserw - popupw - borderw + SCROLL_X
+                var b = browserh - popuph - borderh + SCROLL_Y
+                x = Math.max(0, Math.min(x, r))
+                y = Math.max(0, Math.min(y, b))
+            }
+            if (MOUSE_X < 0 || MOUSE_X > (browserw + SCROLL_X) ||
+                MOUSE_Y < 0 || MOUSE_Y > (browserh + SCROLL_Y) ||
+                !MOUSE_DOWN || !MOUSE_IN) {
+                clearInterval(iid)
+                S(headerid).cursor = 'default'
+            }
+            GoTo(id, x, y)
+        }
+    }
+}
