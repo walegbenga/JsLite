@@ -1024,7 +1024,7 @@ function RollOver(ro1, ro2) {
     var y = Y(ro1)
     Hide(ro2)
     Locate(a, REL, 0, 0)
-    O(ro1).onmouseover = DoRoll
+    $l(ro1).onmouseover = DoRoll
 
     function DoRoll() {
         HideToggle(a)
