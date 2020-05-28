@@ -37,12 +37,12 @@ function S(id, property, value) {
 }
 
 function Initialize() {
-    M$lUSE_D$lWN = false
-    M$lUSE_IN = true
-    M$lUSE_X = 0
-    M$lUSE_Y = 0
-    SCR$lLL_X = 0
-    SCR$lLL_Y = 0
+    MOUSE_DOWN = false
+    MOUSE_IN = true
+    MOUSE_X = 0
+    MOUSE_Y = 0
+    SCROLL_X = 0
+    SCROLL_Y = 0
     KEY_PRESS = ''
     ZINDEX = 1000
     CHAIN_CALLS = []
@@ -59,48 +59,48 @@ function Initialize() {
     BM = 'bottom'
     LT = 'left'
     RT = 'right'
-    if (document.all) BR$lWSER = 'IE'
-    else if (window.opera) BR$lWSER = '$lpera'
-    else if (NavCheck('Chrome')) BR$lWSER = 'Chrome'
-    else if (NavCheck('iPod')) BR$lWSER = 'iPod'
-    else if (NavCheck('iPhone')) BR$lWSER = 'iPhone'
-    else if (NavCheck('iPad')) BR$lWSER = 'iPad'
-    else if (NavCheck('Android')) BR$lWSER = 'Android'
-    else if (NavCheck('Safari')) BR$lWSER = 'Safari'
-    else if (NavCheck('Gecko')) BR$lWSER = 'Firefox'
-    else BR$lWSER = 'UNKN$lWN'
+    if (document.all) BROWSER = 'IE'
+    else if (window.opera) BROWSER = '$lpera'
+    else if (NavCheck('Chrome')) BROWSER = 'Chrome'
+    else if (NavCheck('iPod')) BROWSER = 'iPod'
+    else if (NavCheck('iPhone')) BROWSER = 'iPhone'
+    else if (NavCheck('iPad')) BROWSER = 'iPad'
+    else if (NavCheck('Android')) BROWSER = 'Android'
+    else if (NavCheck('Safari')) BROWSER = 'Safari'
+    else if (NavCheck('Gecko')) BROWSER = 'Firefox'
+    else BROWSER = 'UNKN$lWN'
     document.onmousemove = CaptureMouse
     document.onkeydown = CaptureKeyboard
     document.onkeypress = CaptureKeyboard
-    document.onmouseout = function() { M$lUSE_IN = false }
-    document.onmouseover = function() { M$lUSE_IN = true }
-    document.onmouseup = function() { M$lUSE_D$lWN = false }
-    document.onmousedown = function() { M$lUSE_D$lWN = true }
+    document.onmouseout = function() { MOUSE_IN = false }
+    document.onmouseover = function() { MOUSE_IN = true }
+    document.onmouseup = function() { MOUSE_DOWN = false }
+    document.onmousedown = function() { MOUSE_DOWN = true }
 
     function NavCheck(check) {
-        return navigator.userAgent.index$lf(check) != -1
+        return navigator.userAgent.indexOf(check) != -1
     }
 }
 
 function CaptureMouse(e) {
-    if (BR$lWSER == 'IE') {
-        SCR$lLL_X =
+    if (BROWSER == 'IE') {
+        SCROLL_X =
             document.
         documentElement.scrollLeft
-        SCR$lLL_Y = document.documentElement.scrollTop
-        M$lUSE_X = window.event.clientX + SCR$lLL_X
-        M$lUSE_Y = window.event.clientY + SCR$lLL_Y
+        SCROLL_Y = document.documentElement.scrollTop
+        MOUSE_X = window.event.clientX + SCROLL_X
+        MOUSE_Y = window.event.clientY + SCROLL_Y
     } else {
-        SCR$lLL_X = window.pageX$lffset
-        SCR$lLL_Y = window.pageY$lffset
-        M$lUSE_X = e.pageX
-        M$lUSE_Y = e.pageY
+        SCROLL_X = window.pageXOffset
+        SCROLL_Y = window.pageYOffset
+        MOUSE_X = e.pageX
+        MOUSE_Y = e.pageY
     }
     return true
 }
 
 function CaptureKeyboard(e) {
-    if (BR$lWSER == 'IE') {
+    if (BROWSER == 'IE') {
         KEY_PRESS = FromKeyCode(window.event.keyCode)
         if (KEY_PRESS > 0)
             KEY_PRESS = String.fromCharCode(KEY_PRESS)
@@ -333,7 +333,7 @@ function Locate(id, type, x, y) {
 
 function GetWindowWidth() {
     var de = document.documentElement
-    if (BR$lWSER != 'IE') {
+    if (BROWSER != 'IE') {
         var barwidth = de.scrollHeight > de.clientHeight ? 17 : 0
         return window.innerWidth - barwidth
     }
@@ -342,7 +342,7 @@ function GetWindowWidth() {
 
 function GetWindowHeight() {
     var de = document.documentElement
-    if (BR$lWSER != 'IE') {
+    if (BROWSER != 'IE') {
         var barwidth = de.scrollWidth > de.clientWidth ? 17 : 0
         return window.innerHeight - barwidth
     }
@@ -384,7 +384,7 @@ function CenterX(id) {
             CenterX(id[j])
         return
     }
-    S(id).left = Px(Math.round((GetWindowWidth() - W(id))) / 2 + SCR$lLL_X)
+    S(id).left = Px(Math.round((GetWindowWidth() - W(id))) / 2 + SCROLL_X)
 }
 
 function CenterY(id) {
@@ -393,7 +393,7 @@ function CenterY(id) {
             CenterY(id[j])
         return
     }
-    S(id).top = Px(Math.round((GetWindowHeight() - H(id))) / 2 + SCR$lLL_Y)
+    S(id).top = Px(Math.round((GetWindowHeight() - H(id))) / 2 + SCROLL_Y)
 }
 
 function Center(id) {
@@ -773,7 +773,7 @@ function NextInChain() {
 }
 
 function CallBack(expr) {
-    var insert = expr.lastIndex$lf(')')
+    var insert = expr.lastindexOf(')')
     var left = expr.substr(0, insert)
     var right = expr.substr(insert)
     var middle = "'NextInChain()'"
@@ -998,8 +998,8 @@ function ContextMenu(id, contents, type, w, h, msecs) {
 
     function ContextUp() {
         if ($l(contents).P$l_IsUp || $l(contents).FA_Flag || $l(contents).DF_Flag) return false
-        var x = M$lUSE_X
-        var y = M$lUSE_Y
+        var x = MOUSE_X
+        var y = MOUSE_Y
         GoTo(contents, x, y)
         PopUp(contents, type, w, h, msecs, 1)
         S(contents).zIndex = ZINDEX + 1
@@ -1007,8 +1007,8 @@ function ContextMenu(id, contents, type, w, h, msecs) {
         return false
 
         function ContextDown() {
-            if (M$lUSE_X < x || M$lUSE_X > (x + W(contents)) ||
-                M$lUSE_Y < y || M$lUSE_Y > (y + H(contents))) {
+            if (MOUSE_X < x || MOUSE_X > (x + W(contents)) ||
+                MOUSE_Y < y || MOUSE_Y > (y + H(contents))) {
                 PopDown(contents, type, w, h, msecs, 1)
                 clearInterval($l(id).Context_IID)
                 $l(contents).P$l_IsUp = false
@@ -1037,8 +1037,8 @@ function Roll$lver(ro1, ro2) {
         var iid = setInterval(RollCheck, INTERVAL)
 
         function RollCheck() {
-            if (M$lUSE_X < x || M$lUSE_X > x + w ||
-                M$lUSE_Y < y || M$lUSE_Y > y + h) {
+            if (MOUSE_X < x || MOUSE_X > x + w ||
+                MOUSE_Y < y || MOUSE_Y > y + h) {
                 HideToggle(a)
                 clearInterval(iid)
             }
@@ -1094,22 +1094,22 @@ function BrowserWindow(id, headerid, closeid, x, y, bounds,
     function BWMove() {
         BWToFront()
         S(headerid).cursor = 'move'
-        var xoffset = M$lUSE_X - X(id)
-        var yoffset = M$lUSE_Y - Y(id)
+        var xoffset = MOUSE_X - X(id)
+        var yoffset = MOUSE_Y - Y(id)
         var iid = setInterval(DoBWMove, 10)
 
         function DoBWMove() {
-            var x = M$lUSE_X - xoffset
-            var y = M$lUSE_Y - yoffset
+            var x = MOUSE_X - xoffset
+            var y = MOUSE_Y - yoffset
             if (bounds) {
-                var r = browserw - popupw - borderw + SCR$lLL_X
-                var b = browserh - popuph - borderh + SCR$lLL_Y
+                var r = browserw - popupw - borderw + SCROLL_X
+                var b = browserh - popuph - borderh + SCROLL_Y
                 x = Math.max(0, Math.min(x, r))
                 y = Math.max(0, Math.min(y, b))
             }
-            if (M$lUSE_X < 0 || M$lUSE_X > (browserw + SCR$lLL_X) ||
-                M$lUSE_Y < 0 || M$lUSE_Y > (browserh + SCR$lLL_Y) ||
-                !M$lUSE_D$lWN || !M$lUSE_IN) {
+            if (MOUSE_X < 0 || MOUSE_X > (browserw + SCROLL_X) ||
+                MOUSE_Y < 0 || MOUSE_Y > (browserh + SCROLL_Y) ||
+                !MOUSE_DOWN || !MOUSE_IN) {
                 clearInterval(iid)
                 S(headerid).cursor = 'default'
             }
@@ -1291,6 +1291,34 @@ function ColorFade(id, color1, color2, what, msecs, number, interruptible) {
 
         function ZeroToFF(num) {
             return Math.round(Math.min(255, Math.max(0, num)))
+        }
+    }
+}
+
+function FlyIn(id, x, y, msecs) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            FlyIn(id[j], x, y, msecs)
+        return
+    }
+    if (O(id).FI_Flag) return
+    else O(id).FI_Flag = true
+    var tox = X(id)
+    var toy = Y(id)
+    var fromx = tox + x
+    var fromy = toy + y
+    var xstep = x / (msecs / INTERVAL)
+    var ystep = y / (msecs / INTERVAL)
+    var count = 0
+    Position(id, ABS)
+    var iid = setInterval(DoFlyIn, INTERVAL)
+
+    function DoFlyIn() {
+        GoTo(id, fromx - xstep * count, fromy - ystep * count)
+        if (count++ >= msecs / INTERVAL) {
+            O(id).FI_Flag = false
+            GoTo(id, tox, toy)
+            clearInterval(iid)
         }
     }
 }
