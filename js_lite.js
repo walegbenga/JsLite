@@ -1301,8 +1301,8 @@ function FlyIn(id, x, y, msecs) {
             FlyIn(id[j], x, y, msecs)
         return
     }
-    if (O(id).FI_Flag) return
-    else O(id).FI_Flag = true
+    if ($l(id).FI_Flag) return
+    else $l(id).FI_Flag = true
     var tox = X(id)
     var toy = Y(id)
     var fromx = tox + x
@@ -1316,9 +1316,42 @@ function FlyIn(id, x, y, msecs) {
     function DoFlyIn() {
         GoTo(id, fromx - xstep * count, fromy - ystep * count)
         if (count++ >= msecs / INTERVAL) {
-            O(id).FI_Flag = false
+            $l(id).FI_Flag = false
             GoTo(id, tox, toy)
             clearInterval(iid)
+        }
+    }
+}
+
+function TextRipple(id, number, msecs) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            TextRipple(id[j], number, msecs)
+        return
+    }
+    if (O(id).TR_Flag) return
+    else O(id).TR_Flag = true
+    var html = Html(id)
+    var len = html.length
+    var freq = msecs / len
+    var ctr1 = 0
+    var ctr2 = 0
+    var iid = setInterval(DoTextRipple, freq)
+
+    function DoTextRipple() {
+        var temp = html.substr(0, ctr1)
+        for (var j = 0; j < 7; ++j)
+            temp += InsVars("<font size='+#1'>#2</font>",
+                4 - Math.abs(j - 3), html.substr(ctr1 + j, 1))
+        O(id).innerHTML = temp + html.substr(ctr1 + j)
+        if (++ctr1 == len) {
+            ctr1 = 0
+            if (++ctr2 == number) {
+                if (O(id).innerText) O(id).innerText = html
+                else O(id).textContent = html
+                O(id).TR_Flag = false
+                clearInterval(iid)
+            }
         }
     }
 }
