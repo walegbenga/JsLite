@@ -11,7 +11,13 @@ function $l(id, property, value) {
     }
     if (typeof id == 'object') return id
     else {
-        try { return document.getElementById(id) } catch (e) { alert('PJ - Unknown ID: ' + id) }
+        try {
+            return document.getElementById(id)
+            /*||
+                           return document.getElementByClass(id)*/
+        } catch (e) {
+            alert('PJ - Unknown ID: ' + id)
+        }
     }
 }
 
@@ -1238,6 +1244,53 @@ function TextToMatrix(id, msecs) {
         if (++count == INTERVAL) {
             $l(id).TM_Flag = false
             clearInterval(iid)
+        }
+    }
+}
+
+function ColorFade(id, color1, color2, what, msecs, number, interruptible) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            ColorFade(id[j], color1, color2, what, msecs, number)
+        return
+    }
+    if ($l(id)['CF_Flag' + what]) {
+        if (!$l(id)['CF_Int' + what]) return
+        else clearInterval($l(id)['CF_IID' + what])
+    } else $l(id)['CF_Flag' + what] = true
+    if (color1[0] == '#') color1 = color1.substr(1)
+    if (color2[0] == '#') color2 = color2.substr(1)
+    var step = Math.round(msecs / INTERVAL)
+    var index = 0
+    var count = 0
+    var direc = 1
+    var cols = []
+    var steps = []
+    for (var j = 0; j < 3; ++j) {
+        var tmp = HexDec(color2.substr(j * 2, 2))
+        cols[j] = HexDec(color1.substr(j * 2, 2))
+        steps[j] = (tmp - cols[j]) / step
+    }
+    if (what == 'text') var prop = 'color'
+    else var prop = 'backgroundColor'
+    $l(id)['CF_Int' + what] = interruptible
+    $l(id)['CF_IID' + what] = setInterval(DoColorFade, INTERVAL)
+
+    function DoColorFade() {
+        var temp = '#'
+        for (var j = 0; j < 3; ++j)
+            temp += DecHex(ZeroToFF(cols[j] + index * steps[j]))
+        S(id)[prop] = temp
+        if ((index += direc) > step || index < 0) {
+            direc = -direc
+            if (++count == number) {
+                $l(id)['CF_Flag' + what] = false
+                clearInterval($l(id)['CF_IID' + what])
+            }
+        }
+
+        function ZeroToFF(num) {
+            return Math.round(Math.min(255, Math.max(0, num)))
         }
     }
 }
