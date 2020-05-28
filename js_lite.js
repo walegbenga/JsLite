@@ -471,11 +471,11 @@ function FadeToggle(id, msecs, interruptible, CB) {
         return
     }
     if ($l(id).Fadeout) FadeIn(id, msecs, interruptible, CB)
-    else Fade$lut(id, msecs, interruptible, CB)
+    else FadeOut(id, msecs, interruptible, CB)
 }
 
 function FadeBetween(id1, id2, msecs, interruptible, CB) {
-    Fade$lut(id1, msecs, interruptible, CB)
+    FadeOut(id1, msecs, interruptible, CB)
     FadeIn(id2, msecs, interruptible, CB)
 }
 
@@ -927,7 +927,7 @@ function PopDown(id, type, w, h, msecs, interruptible) {
         return
     }
     if (type == 'fade') {
-        Fade$lut(id, msecs, interruptible,
+        FadeOut(id, msecs, interruptible,
             InsVars("Hide('#1')", id))
     } else if (type == 'inflate') {
         Deflate(id, w, h, msecs, interruptible,
@@ -1430,5 +1430,39 @@ function Slideshow(id, images, msecs, wait) {
         FadeBetween('SS_IMG1', 'SS_IMG2', msecs, 0, next)
         if (!$l(id).SS_Stop) setTimeout(DoSlideshow, msecs + wait)
         else $l(id).SS_Flag = false
+    }
+}
+
+function Billboard(id, objects, random, msecs, wait) {
+    var len = objects.length
+    if (!O(id).BB_Ready) {
+        var h = 0
+        O(id).BB_Index = 0
+        O(id).BB_Ready = true
+        FadeOut(objects.slice(1), 1, 0)
+        for (j = 1; j < len; ++j) {
+            h -= H(O(objects[j - 1]))
+            Locate(O(objects[j]), REL, 0, h)
+        }
+    }
+    O(id).BB_Stop = (wait == 'stop') ? true : false
+    if (!O(id).BB_Stop && !O(id).BB_Flag)
+        O(id).BB_IID = setTimeout(DoBillboard, msecs + wait)
+
+    function DoBillboard() {
+        O(id).BB_Flag = true
+        if (O(id).BB_Stop) {
+            O(id).BB_Flag = false
+            clearTimeout(O(id).BB_IID)
+            return
+        } else FadeOut(objects[O(id).BB_Index], msecs, 0)
+        if (random) {
+            var rand = O(id).BB_Index
+            while (rand == O(id).BB_Index)
+                rand = Math.floor(Math.random() * len)
+            O(id).BB_Index = rand
+        } else O(id).BB_Index = ++O(id).BB_Index % len
+        FadeIn(objects[O(id).BB_Index], msecs, 0)
+        O(id).BB_IID = setTimeout(DoBillboard, msecs + wait)
     }
 }
