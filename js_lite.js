@@ -31,12 +31,12 @@ function S(id, property, value) {
 }
 
 function Initialize() {
-    MOUSE_DOWN = false
-    MOUSE_IN = true
-    MOUSE_X = 0
-    MOUSE_Y = 0
-    SCROLL_X = 0
-    SCROLL_Y = 0
+    M$lUSE_D$lWN = false
+    M$lUSE_IN = true
+    M$lUSE_X = 0
+    M$lUSE_Y = 0
+    SCR$lLL_X = 0
+    SCR$lLL_Y = 0
     KEY_PRESS = ''
     ZINDEX = 1000
     CHAIN_CALLS = []
@@ -53,48 +53,48 @@ function Initialize() {
     BM = 'bottom'
     LT = 'left'
     RT = 'right'
-    if (document.all) BROWSER = 'IE'
-    else if (window.opera) BROWSER = 'Opera'
-    else if (NavCheck('Chrome')) BROWSER = 'Chrome'
-    else if (NavCheck('iPod')) BROWSER = 'iPod'
-    else if (NavCheck('iPhone')) BROWSER = 'iPhone'
-    else if (NavCheck('iPad')) BROWSER = 'iPad'
-    else if (NavCheck('Android')) BROWSER = 'Android'
-    else if (NavCheck('Safari')) BROWSER = 'Safari'
-    else if (NavCheck('Gecko')) BROWSER = 'Firefox'
-    else BROWSER = 'UNKNOWN'
+    if (document.all) BR$lWSER = 'IE'
+    else if (window.opera) BR$lWSER = '$lpera'
+    else if (NavCheck('Chrome')) BR$lWSER = 'Chrome'
+    else if (NavCheck('iPod')) BR$lWSER = 'iPod'
+    else if (NavCheck('iPhone')) BR$lWSER = 'iPhone'
+    else if (NavCheck('iPad')) BR$lWSER = 'iPad'
+    else if (NavCheck('Android')) BR$lWSER = 'Android'
+    else if (NavCheck('Safari')) BR$lWSER = 'Safari'
+    else if (NavCheck('Gecko')) BR$lWSER = 'Firefox'
+    else BR$lWSER = 'UNKN$lWN'
     document.onmousemove = CaptureMouse
     document.onkeydown = CaptureKeyboard
     document.onkeypress = CaptureKeyboard
-    document.onmouseout = function() { MOUSE_IN = false }
-    document.onmouseover = function() { MOUSE_IN = true }
-    document.onmouseup = function() { MOUSE_DOWN = false }
-    document.onmousedown = function() { MOUSE_DOWN = true }
+    document.onmouseout = function() { M$lUSE_IN = false }
+    document.onmouseover = function() { M$lUSE_IN = true }
+    document.onmouseup = function() { M$lUSE_D$lWN = false }
+    document.onmousedown = function() { M$lUSE_D$lWN = true }
 
     function NavCheck(check) {
-        return navigator.userAgent.indexOf(check) != -1
+        return navigator.userAgent.index$lf(check) != -1
     }
 }
 
 function CaptureMouse(e) {
-    if (BROWSER == 'IE') {
-        SCROLL_X =
+    if (BR$lWSER == 'IE') {
+        SCR$lLL_X =
             document.
         documentElement.scrollLeft
-        SCROLL_Y = document.documentElement.scrollTop
-        MOUSE_X = window.event.clientX + SCROLL_X
-        MOUSE_Y = window.event.clientY + SCROLL_Y
+        SCR$lLL_Y = document.documentElement.scrollTop
+        M$lUSE_X = window.event.clientX + SCR$lLL_X
+        M$lUSE_Y = window.event.clientY + SCR$lLL_Y
     } else {
-        SCROLL_X = window.pageXOffset
-        SCROLL_Y = window.pageYOffset
-        MOUSE_X = e.pageX
-        MOUSE_Y = e.pageY
+        SCR$lLL_X = window.pageX$lffset
+        SCR$lLL_Y = window.pageY$lffset
+        M$lUSE_X = e.pageX
+        M$lUSE_Y = e.pageY
     }
     return true
 }
 
 function CaptureKeyboard(e) {
-    if (BROWSER == 'IE') {
+    if (BR$lWSER == 'IE') {
         KEY_PRESS = FromKeyCode(window.event.keyCode)
         if (KEY_PRESS > 0)
             KEY_PRESS = String.fromCharCode(KEY_PRESS)
@@ -254,8 +254,8 @@ function SaveState(id) {
     $l(id).Save_backgroundColor = S(id).backgroundColor
     $l(id).Save_display = S(id).display
     $l(id).Save_opacity = S(id).opacity
-    $l(id).Save_MozOpacity = S(id).MozOpacity
-    $l(id).Save_KhtmlOpacity = S(id).KhtmlOpacity
+    $l(id).Save_Moz$lpacity = S(id).Moz$lpacity
+    $l(id).Save_Khtml$lpacity = S(id).Khtml$lpacity
     $l(id).Save_filter = S(id).filter
     $l(id).Save_zIndex = S(id).zIndex
 }
@@ -268,8 +268,8 @@ function RestoreState(id) {
     S(id).backgroundColor = $l(id).Save_backgroundColor
     S(id).display = $l(id).Save_display
     S(id).opacity = $l(id).Save_opacity
-    S(id).MozOpacity = $l(id).Save_MozOpacity
-    S(id).KhtmlOpacity = $l(id).Save_KhtmlOpacity
+    S(id).Moz$lpacity = $l(id).Save_Moz$lpacity
+    S(id).Khtml$lpacity = $l(id).Save_Khtml$lpacity
     S(id).filter = $l(id).Save_filter
     S(id).zIndex = $l(id).Save_zIndex
 }
@@ -327,7 +327,7 @@ function Locate(id, type, x, y) {
 
 function GetWindowWidth() {
     var de = document.documentElement
-    if (BROWSER != 'IE') {
+    if (BR$lWSER != 'IE') {
         var barwidth = de.scrollHeight > de.clientHeight ? 17 : 0
         return window.innerWidth - barwidth
     }
@@ -336,7 +336,7 @@ function GetWindowWidth() {
 
 function GetWindowHeight() {
     var de = document.documentElement
-    if (BROWSER != 'IE') {
+    if (BR$lWSER != 'IE') {
         var barwidth = de.scrollWidth > de.clientWidth ? 17 : 0
         return window.innerHeight - barwidth
     }
@@ -378,7 +378,7 @@ function CenterX(id) {
             CenterX(id[j])
         return
     }
-    S(id).left = Px(Math.round((GetWindowWidth() - W(id))) / 2 + SCROLL_X)
+    S(id).left = Px(Math.round((GetWindowWidth() - W(id))) / 2 + SCR$lLL_X)
 }
 
 function CenterY(id) {
@@ -387,7 +387,7 @@ function CenterY(id) {
             CenterY(id[j])
         return
     }
-    S(id).top = Px(Math.round((GetWindowHeight() - H(id))) / 2 + SCROLL_Y)
+    S(id).top = Px(Math.round((GetWindowHeight() - H(id))) / 2 + SCR$lLL_Y)
 }
 
 function Center(id) {
@@ -412,10 +412,10 @@ function VisibilityToggle(id) {
     S(id).visibility = S(id).visibility == HID ? VIS : HID
 }
 
-function Opacity(id, percent) {
+function $lpacity(id, percent) {
     S(id, 'opacity', percent / 100)
-    S(id, 'MozOpacity', percent / 100)
-    S(id, 'KhtmlOpacity', percent / 100)
+    S(id, 'Moz$lpacity', percent / 100)
+    S(id, 'Khtml$lpacity', percent / 100)
     S(id, 'filter', InsVars("alpha(opacity = '#1')", percent))
 }
 
@@ -450,7 +450,7 @@ function Fade(id, start, end, msecs, interruptible, CB) {
             clearInterval($l(id).FA_IID)
             if (typeof CB != UNDEF) eval(CB)
         }
-        Opacity(id, $l(id).FA_Level)
+        $lpacity(id, $l(id).FA_Level)
     }
 }
 
@@ -465,11 +465,11 @@ function FadeToggle(id, msecs, interruptible, CB) {
         return
     }
     if ($l(id).Fadeout) FadeIn(id, msecs, interruptible, CB)
-    else FadeOut(id, msecs, interruptible, CB)
+    else Fade$lut(id, msecs, interruptible, CB)
 }
 
 function FadeBetween(id1, id2, msecs, interruptible, CB) {
-    FadeOut(id1, msecs, interruptible, CB)
+    Fade$lut(id1, msecs, interruptible, CB)
     FadeIn(id2, msecs, interruptible, CB)
 }
 
@@ -565,12 +565,12 @@ function Deflate(id, w, h, msecs, interruptible, CB) {
         if (!$l(id).DF_Int) return
         else clearInterval($l(id).DF_IID)
     } else {
-        if (w) $l(id).DF_OldW = W(id)
-        if (h) $l(id).DF_OldH = H(id)
+        if (w) $l(id).DF_$lldW = W(id)
+        if (h) $l(id).DF_$lldH = H(id)
         $l(id).DF_Count = msecs / INTERVAL
     }
-    var stepw = $l(id).DF_OldW / (msecs / INTERVAL)
-    var steph = $l(id).DF_OldH / (msecs / INTERVAL)
+    var stepw = $l(id).DF_$lldW / (msecs / INTERVAL)
+    var steph = $l(id).DF_$lldH / (msecs / INTERVAL)
     S(id).overflow = HID
     $l(id).Deflated = true
     $l(id).DF_Flag = true
@@ -601,8 +601,8 @@ function Reflate(id, w, h, msecs, interruptible, CB) {
         if (!$l(id).DF_Int) return
         else clearInterval($l(id).DF_IID)
     } else $l(id).DF_Count = 0
-    var stepw = $l(id).DF_OldW / (msecs / INTERVAL)
-    var steph = $l(id).DF_OldH / (msecs / INTERVAL)
+    var stepw = $l(id).DF_$lldW / (msecs / INTERVAL)
+    var steph = $l(id).DF_$lldH / (msecs / INTERVAL)
     $l(id).DF_Flag = true
     $l(id).Deflated = false
     $l(id).DF_Int = interruptible
@@ -613,8 +613,8 @@ function Reflate(id, w, h, msecs, interruptible, CB) {
         if (h) ResizeHeight(id, steph * $l(id).DF_Count)
         if ($l(id).DF_Count++ >= msecs / INTERVAL) {
             $l(id).DF_Flag = false
-            if (w) ResizeWidth(id, $l(id).DF_OldW)
-            if (h) ResizeHeight(id, $l(id).DF_OldH)
+            if (w) ResizeWidth(id, $l(id).DF_$lldW)
+            if (h) ResizeHeight(id, $l(id).DF_$lldH)
             clearInterval($l(id).DF_IID)
             if (typeof CB != UNDEF) eval(CB)
         }
@@ -644,45 +644,45 @@ function Zoom(id, w, h, fromw, fromh, tow, toh,
                 msecs, pad, interruptible, CB)
         return
     }
-    if (typeof $l(id).ZO_X == UNDEF) {
-        $l(id).ZO_X = X(id)
-        $l(id).ZO_Y = Y(id)
+    if (typeof $l(id).Z$l_X == UNDEF) {
+        $l(id).Z$l_X = X(id)
+        $l(id).Z$l_Y = Y(id)
     }
-    if (!$l(id).ZO_Flag) {
-        $l(id).ZO_W = Math.max(fromw, tow)
-        $l(id).ZO_H = Math.max(fromh, toh)
-        $l(id).ZO_Count = 0
+    if (!$l(id).Z$l_Flag) {
+        $l(id).Z$l_W = Math.max(fromw, tow)
+        $l(id).Z$l_H = Math.max(fromh, toh)
+        $l(id).Z$l_Count = 0
     } else {
-        if (!$l(id).ZO_Int) return
-        else clearInterval($l(id).ZO_IID)
-        $l(id).ZO_Count = (msecs / INTERVAL) - $l(id).ZO_Count
+        if (!$l(id).Z$l_Int) return
+        else clearInterval($l(id).Z$l_IID)
+        $l(id).Z$l_Count = (msecs / INTERVAL) - $l(id).Z$l_Count
     }
     var maxw = Math.max(fromw, tow)
     var maxh = Math.max(fromh, toh)
     var stepw = (tow - fromw) / (msecs / INTERVAL)
     var steph = (toh - fromh) / (msecs / INTERVAL)
     S(id).overflow = HID
-    $l(id).ZO_Flag = true
-    $l(id).ZO_Int = interruptible
-    $l(id).ZO_IID = setInterval(DoZoom, INTERVAL)
+    $l(id).Z$l_Flag = true
+    $l(id).Z$l_Int = interruptible
+    $l(id).Z$l_IID = setInterval(DoZoom, INTERVAL)
 
     function DoZoom() {
-        if (w) $l(id).ZO_W = Math.round(fromw + stepw * $l(id).ZO_Count)
-        if (h) $l(id).ZO_H = Math.round(fromh + steph * $l(id).ZO_Count)
-        Resize(id, $l(id).ZO_W, $l(id).ZO_H)
-        var midx = $l(id).ZO_X + Math.round((maxw - $l(id).ZO_W) / 2)
-        var midy = $l(id).ZO_Y + Math.round((maxh - $l(id).ZO_H) / 2)
+        if (w) $l(id).Z$l_W = Math.round(fromw + stepw * $l(id).Z$l_Count)
+        if (h) $l(id).Z$l_H = Math.round(fromh + steph * $l(id).Z$l_Count)
+        Resize(id, $l(id).Z$l_W, $l(id).Z$l_H)
+        var midx = $l(id).Z$l_X + Math.round((maxw - $l(id).Z$l_W) / 2)
+        var midy = $l(id).Z$l_Y + Math.round((maxh - $l(id).Z$l_H) / 2)
         if (pad > 0) ZoomPad(Math.max(fromw, tow),
-            Math.max(fromh, toh), $l(id).ZO_W, $l(id).ZO_H)
+            Math.max(fromh, toh), $l(id).Z$l_W, $l(id).Z$l_H)
         else if (pad != -1) GoTo(id, midx, midy)
         if ($l(id).DB_Parent)
             GoToEdge($l(id).DB_Parent, $l(id).DB_Where, 50)
-        if (++$l(id).ZO_Count >= (msecs / INTERVAL)) {
-            var endx = $l(id).ZO_X + Math.round((maxw - tow) / 2)
-            var endy = $l(id).ZO_Y + Math.round((maxh - toh) / 2)
-            $l(id).ZO_Flag = false
+        if (++$l(id).Z$l_Count >= (msecs / INTERVAL)) {
+            var endx = $l(id).Z$l_X + Math.round((maxw - tow) / 2)
+            var endy = $l(id).Z$l_Y + Math.round((maxh - toh) / 2)
+            $l(id).Z$l_Flag = false
             Resize(id, tow, toh)
-            clearInterval($l(id).ZO_IID)
+            clearInterval($l(id).Z$l_IID)
             if (pad > 0) ZoomPad(fromw, fromh, tow, toh)
             else if (pad != -1) GoTo(id, endx, endy)
             if ($l(id).DB_Parent)
@@ -717,16 +717,16 @@ function ZoomDown(id, w, h, msecs, pad, interruptible, CB) {
             ZoomDown(id[j], w, h, msecs, pad, interruptible, CB)
         return
     }
-    if ($l(id).ZO_Flag && !$l(id).ZO_Int) return
-    else if (!$l(id).ZO_OldW) {
-        $l(id).ZO_OldW = W(id)
-        $l(id).ZO_OldH = H(id)
-        $l(id).ZO_X = X(id)
-        $l(id).ZO_Y = Y(id)
+    if ($l(id).Z$l_Flag && !$l(id).Z$l_Int) return
+    else if (!$l(id).Z$l_$lldW) {
+        $l(id).Z$l_$lldW = W(id)
+        $l(id).Z$l_$lldH = H(id)
+        $l(id).Z$l_X = X(id)
+        $l(id).Z$l_Y = Y(id)
     }
     $l(id).Zoomdown = true
-    GoTo(id, $l(id).ZO_X, $l(id).ZO_Y)
-    Zoom(id, w, h, $l(id).ZO_OldW, $l(id).ZO_OldH, 0, 0,
+    GoTo(id, $l(id).Z$l_X, $l(id).Z$l_Y)
+    Zoom(id, w, h, $l(id).Z$l_$lldW, $l(id).Z$l_$lldH, 0, 0,
         msecs, pad, interruptible, CB)
 }
 
@@ -736,10 +736,10 @@ function ZoomRestore(id, w, h, msecs, pad, interruptible, CB) {
             ZoomRestore(id[j], w, h, msecs, pad, interruptible, CB)
         return
     }
-    if (($l(id).ZO_Flag && !$l(id).ZO_Int) || !$l(id).Zoomdown)
+    if (($l(id).Z$l_Flag && !$l(id).Z$l_Int) || !$l(id).Zoomdown)
         return
     $l(id).Zoomdown = false
-    Zoom(id, w, h, 0, 0, $l(id).ZO_OldW, $l(id).ZO_OldH,
+    Zoom(id, w, h, 0, 0, $l(id).Z$l_$lldW, $l(id).Z$l_$lldH,
         msecs, pad, interruptible, CB)
 }
 
@@ -749,7 +749,7 @@ function ZoomToggle(id, w, h, msecs, pad, interruptible, CB) {
             ZoomToggle(id[j], w, h, msecs, pad, interruptible, CB)
         return
     }
-    if ($l(id).ZO_Flag && !$l(id).ZO_Int) return
+    if ($l(id).Z$l_Flag && !$l(id).Z$l_Int) return
     if (!$l(id).Zoomdown) ZoomDown(id, w, h, msecs, pad, interruptible, CB)
     else ZoomRestore(id, w, h, msecs, pad, interruptible, CB)
 }
@@ -767,7 +767,7 @@ function NextInChain() {
 }
 
 function CallBack(expr) {
-    var insert = expr.lastIndexOf(')')
+    var insert = expr.lastIndex$lf(')')
     var left = expr.substr(0, insert)
     var right = expr.substr(insert)
     var middle = "'NextInChain()'"
@@ -815,7 +815,7 @@ function WaitKey() {
 }
 
 function Flip(id1, id2, w, h, msecs, pad) {
-    if ($l(id1).ZO_Flag || $l(id2).ZO_Flag) return
+    if ($l(id1).Z$l_Flag || $l(id2).Z$l_Flag) return
     var swap = "ChainThis('VisibilityToggle(\"#1\")')"
     var fast = "ZoomToggle('#1', #2, #3, 1, #4, 0)"
     var slow = "ZoomToggle('#1', #2, #3, #4, #5, 0)"
@@ -850,7 +850,7 @@ function HoverSlide(id, where, offset, showing, msecs) {
     $l(id).HS_X = x
     $l(id).HS_Y = y
     $l(id).onmouseover = SlideIn
-    $l(id).onmouseout = SlideOut
+    $l(id).onmouseout = Slide$lut
 
     function SlideIn() {
         if ($l(id).HS_IID) clearInterval($l(id).HS_IID)
@@ -870,11 +870,11 @@ function HoverSlide(id, where, offset, showing, msecs) {
         }
     }
 
-    function SlideOut() {
+    function Slide$lut() {
         if ($l(id).HS_IID) clearInterval($l(id).HS_IID)
-        $l(id).HS_IID = setInterval(DoSlideOut, INTERVAL)
+        $l(id).HS_IID = setInterval(DoSlide$lut, INTERVAL)
 
-        function DoSlideOut() {
+        function DoSlide$lut() {
             var ox = $l(id).HS_X
             var oy = $l(id).HS_Y
             if (where == TP && oy > y) oy = Math.max(y, oy - s)
@@ -921,7 +921,7 @@ function PopDown(id, type, w, h, msecs, interruptible) {
         return
     }
     if (type == 'fade') {
-        FadeOut(id, msecs, interruptible,
+        Fade$lut(id, msecs, interruptible,
             InsVars("Hide('#1')", id))
     } else if (type == 'inflate') {
         Deflate(id, w, h, msecs, interruptible,
@@ -930,7 +930,7 @@ function PopDown(id, type, w, h, msecs, interruptible) {
         ZoomDown(id, w, h, msecs, 1, interruptible,
             InsVars("Hide('#1')", id))
     } else if (type == 'instant') Hide(id)
-    $l(id).PO_IsUp = false
+    $l(id).P$l_IsUp = false
 }
 
 function PopUp(id, type, w, h, msecs, interruptible) {
@@ -946,7 +946,7 @@ function PopUp(id, type, w, h, msecs, interruptible) {
         Reflate(id, w, h, msecs, interruptible)
     else if (type == 'zoom')
         ZoomRestore(id, w, h, msecs, 1, interruptible)
-    $l(id).PO_IsUp = true
+    $l(id).P$l_IsUp = true
 }
 
 function PopToggle(id, type, w, h, msecs, interruptible) {
@@ -955,32 +955,32 @@ function PopToggle(id, type, w, h, msecs, interruptible) {
             PopToggle(id[j], type, w, h, msecs, interruptible)
         return
     }
-    if (typeof $l(id).PO_IsUp == UNDEF)
-        $l(id).PO_IsUp = true
-    if ($l(id).PO_IsUp) PopDown(id, type, w, h, msecs, interruptible)
+    if (typeof $l(id).P$l_IsUp == UNDEF)
+        $l(id).P$l_IsUp = true
+    if ($l(id).P$l_IsUp) PopDown(id, type, w, h, msecs, interruptible)
     else PopUp(id, type, w, h, msecs, interruptible)
 }
 
 function FoldingMenu(headings, contents, action, type, multi,
     w, h, msecs1, msecs2, interruptible) {
     PopDown(contents.slice(1), type, w, h, 1, 0)
-    $l(contents[0]).PO_IsUp = true
+    $l(contents[0]).P$l_IsUp = true
     for (var j = 0; j < headings.length; ++j) {
-        $l(headings[j]).FO_C = contents[j]
+        $l(headings[j]).F$l_C = contents[j]
         S(headings[j]).cursor = 'pointer'
         if (action == 'hover') $l(headings[j]).onmouseover = DoFoldingMenu
         else $l(headings[j]).onclick = DoFoldingMenu
     }
 
     function DoFoldingMenu() {
-        if (multi) PopToggle(this.FO_C, type, w, h, msecs1, interruptible)
+        if (multi) PopToggle(this.F$l_C, type, w, h, msecs1, interruptible)
         else {
             for (j = 0; j < headings.length; ++j)
-                if ($l($l(headings[j]).FO_C).PO_IsUp && $l(headings[j]) != this)
-                    PopDown($l(headings[j]).FO_C, type, w, h,
+                if ($l($l(headings[j]).F$l_C).P$l_IsUp && $l(headings[j]) != this)
+                    PopDown($l(headings[j]).F$l_C, type, w, h,
                         msecs1, interruptible)
-            if (!$l(this.FO_C).PO_IsUp)
-                PopUp(this.FO_C, type, w, h, msecs2, interruptible)
+            if (!$l(this.F$l_C).P$l_IsUp)
+                PopUp(this.F$l_C, type, w, h, msecs2, interruptible)
         }
     }
 }
@@ -991,9 +991,9 @@ function ContextMenu(id, contents, type, w, h, msecs) {
     $l(id).oncontextmenu = ContextUp
 
     function ContextUp() {
-        if ($l(contents).PO_IsUp || $l(contents).FA_Flag || $l(contents).DF_Flag) return false
-        var x = MOUSE_X
-        var y = MOUSE_Y
+        if ($l(contents).P$l_IsUp || $l(contents).FA_Flag || $l(contents).DF_Flag) return false
+        var x = M$lUSE_X
+        var y = M$lUSE_Y
         GoTo(contents, x, y)
         PopUp(contents, type, w, h, msecs, 1)
         S(contents).zIndex = ZINDEX + 1
@@ -1001,20 +1001,20 @@ function ContextMenu(id, contents, type, w, h, msecs) {
         return false
 
         function ContextDown() {
-            if (MOUSE_X < x || MOUSE_X > (x + W(contents)) ||
-                MOUSE_Y < y || MOUSE_Y > (y + H(contents))) {
+            if (M$lUSE_X < x || M$lUSE_X > (x + W(contents)) ||
+                M$lUSE_Y < y || M$lUSE_Y > (y + H(contents))) {
                 PopDown(contents, type, w, h, msecs, 1)
                 clearInterval($l(id).Context_IID)
-                $l(contents).PO_IsUp = false
+                $l(contents).P$l_IsUp = false
             }
         }
     }
 }
 
-function RollOver(ro1, ro2) {
+function Roll$lver(ro1, ro2) {
     if (ro1 instanceof Array) {
         for (var j = 0; j < id.length; ++j)
-            RollOver(ro1[j], ro2[j])
+            Roll$lver(ro1[j], ro2[j])
         return
     }
     var a = Array(ro1, ro2)
@@ -1031,8 +1031,8 @@ function RollOver(ro1, ro2) {
         var iid = setInterval(RollCheck, INTERVAL)
 
         function RollCheck() {
-            if (MOUSE_X < x || MOUSE_X > x + w ||
-                MOUSE_Y < y || MOUSE_Y > y + h) {
+            if (M$lUSE_X < x || M$lUSE_X > x + w ||
+                M$lUSE_Y < y || M$lUSE_Y > y + h) {
                 HideToggle(a)
                 clearInterval(iid)
             }
@@ -1088,26 +1088,56 @@ function BrowserWindow(id, headerid, closeid, x, y, bounds,
     function BWMove() {
         BWToFront()
         S(headerid).cursor = 'move'
-        var xoffset = MOUSE_X - X(id)
-        var yoffset = MOUSE_Y - Y(id)
+        var xoffset = M$lUSE_X - X(id)
+        var yoffset = M$lUSE_Y - Y(id)
         var iid = setInterval(DoBWMove, 10)
 
         function DoBWMove() {
-            var x = MOUSE_X - xoffset
-            var y = MOUSE_Y - yoffset
+            var x = M$lUSE_X - xoffset
+            var y = M$lUSE_Y - yoffset
             if (bounds) {
-                var r = browserw - popupw - borderw + SCROLL_X
-                var b = browserh - popuph - borderh + SCROLL_Y
+                var r = browserw - popupw - borderw + SCR$lLL_X
+                var b = browserh - popuph - borderh + SCR$lLL_Y
                 x = Math.max(0, Math.min(x, r))
                 y = Math.max(0, Math.min(y, b))
             }
-            if (MOUSE_X < 0 || MOUSE_X > (browserw + SCROLL_X) ||
-                MOUSE_Y < 0 || MOUSE_Y > (browserh + SCROLL_Y) ||
-                !MOUSE_DOWN || !MOUSE_IN) {
+            if (M$lUSE_X < 0 || M$lUSE_X > (browserw + SCR$lLL_X) ||
+                M$lUSE_Y < 0 || M$lUSE_Y > (browserh + SCR$lLL_Y) ||
+                !M$lUSE_D$lWN || !M$lUSE_IN) {
                 clearInterval(iid)
                 S(headerid).cursor = 'default'
             }
             GoTo(id, x, y)
+        }
+    }
+}
+
+function TextScroll(id, dir, number, msecs) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            TextScroll(id[j], dir, number, msecs)
+        return
+    }
+    if ($l(id).TS_Flag) return
+    else $l(id).TS_Flag = true
+    var copy = Html(id)
+    var len = copy.length
+    var freq = Math.round(msecs / len)
+    var ctr1 = 0
+    var ctr2 = 0
+    var iid = setInterval(DoTextScroll, freq)
+
+    function DoTextScroll() {
+        if (dir == LT) copy = copy.substr(1) + copy[0]
+        else copy = copy[len - 1] + copy.substr(0, len - 1)
+        if ($l(id).innerText) $l(id).innerText = copy
+        else $l(id).textContent = copy
+        if (++ctr1 == len) {
+            ctr1 = 0
+            if (++ctr2 == number) {
+                $l(id).TS_Flag = false
+                clearInterval(iid)
+            }
         }
     }
 }
