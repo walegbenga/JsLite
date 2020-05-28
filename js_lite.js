@@ -1398,3 +1398,37 @@ function Opacity(id, percent) {
 function FadeOut(id, msecs, interruptible, CB) {
     Fade(id, 100, 0, msecs, interruptible, CB)
 }
+
+function Slideshow(id, images, msecs, wait) {
+    var len = images.length
+    $l(id).SS_Stop = (wait == 'stop') ? true : false
+    if (!$l(id).SS_Stop && !$l(id).SS_Flag) {
+        if (!$l('SS_IMG1')) {
+            var newimg = document.createElement('img')
+            newimg.setAttribute('id', 'SS_IMG1')
+            $l(id).appendChild(newimg)
+            newimg = document.createElement('img')
+            newimg.setAttribute('id', 'SS_IMG2')
+            $l(id).appendChild(newimg)
+            Locate('SS_IMG2', ABS, 0, 0)
+        }
+        var index = 0
+        $l('SS_IMG1').src = images[0]
+        Opacity('SS_IMG2', 0)
+        FadeIn('SS_IMG1', msecs, 0)
+        setTimeout(DoSlideshow, msecs + wait)
+    }
+
+    function DoSlideshow() {
+        $l('SS_IMG1').src = images[index]
+        Opacity('SS_IMG1', 100)
+        Opacity('SS_IMG2', 0)
+        index = ++index % images.length
+        $l('SS_IMG2').src = images[index]
+        var next = InsVars("$l('SS_IMG1').src = '#1'",
+            images[(index + 1) % len])
+        FadeBetween('SS_IMG1', 'SS_IMG2', msecs, 0, next)
+        if (!$l(id).SS_Stop) setTimeout(DoSlideshow, msecs + wait)
+        else $l(id).SS_Flag = false
+    }
+}
