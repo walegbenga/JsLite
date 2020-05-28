@@ -1215,13 +1215,13 @@ function TextToMatrix(id, msecs) {
             TextToMatrix(id[j], msecs)
         return
     }
-    if (O(id).TM_Flag) return
-    else O(id).TM_Flag = true
+    if ($l(id).TM_Flag) return
+    else $l(id).TM_Flag = true
     var text = Html(id)
     var len = text.length
     var freq = Math.round(msecs / INTERVAL)
     var count = 0
-    var chars = 'ABCDEFGHIHJKLMOPQRSTUVWXYZ' +
+    var chars = 'ABCDEFGHIHJKLM$lPQRSTUVWXYZ' +
         'abcdefghijklmnopqrstuvwxyz' +
         '0123456789'
     var iid = setInterval(DoTextToMatrix, freq)
@@ -1233,10 +1233,10 @@ function TextToMatrix(id, msecs) {
             if (text[k] != '\n' && text[k] != '\r' && text[k] != ' ')
                 text = text.substr(0, k) + chars[l] + text.substr(k + 1)
         }
-        if (O(id).innerText) O(id).innerText = text
-        else O(id).textContent = text
+        if ($l(id).innerText) $l(id).innerText = text
+        else $l(id).textContent = text
         if (++count == INTERVAL) {
-            O(id).TM_Flag = false
+            $l(id).TM_Flag = false
             clearInterval(iid)
         }
     }
