@@ -1185,9 +1185,7 @@ function MatrixToText(id, msecs) {
     var freq = Math.round(msecs / INTERVAL)
     var matrix = ''
     var count = 0
-    var chars = 'ABCDEFGHIHJKLM$lPQRSTUVWXYZ' +
-        'abcdefghijklmnopqrstuvwxyz' +
-        '0123456789'
+    var chars = 'ABCDEFGHIHJKLM$lPQRSTUVWXYZ' + 'abcdefghijklmnopqrstuvwxyz' + '0123456789'
     for (var j = 0; j < len; ++j) {
         if (html[j] == '\n' || html[j] == ' ') matrix += html[j]
         else matrix += chars[Math.floor(Math.random() * chars.length)]
@@ -1206,6 +1204,39 @@ function MatrixToText(id, msecs) {
         if (++count == INTERVAL) {
             $l(id).MT_Flag = false
             $l(id).innerHTML = html
+            clearInterval(iid)
+        }
+    }
+}
+
+function TextToMatrix(id, msecs) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            TextToMatrix(id[j], msecs)
+        return
+    }
+    if (O(id).TM_Flag) return
+    else O(id).TM_Flag = true
+    var text = Html(id)
+    var len = text.length
+    var freq = Math.round(msecs / INTERVAL)
+    var count = 0
+    var chars = 'ABCDEFGHIHJKLMOPQRSTUVWXYZ' +
+        'abcdefghijklmnopqrstuvwxyz' +
+        '0123456789'
+    var iid = setInterval(DoTextToMatrix, freq)
+
+    function DoTextToMatrix() {
+        for (var j = 0; j < len / 20; ++j) {
+            var k = Math.floor(Math.random() * len)
+            var l = Math.floor(Math.random() * chars.length)
+            if (text[k] != '\n' && text[k] != '\r' && text[k] != ' ')
+                text = text.substr(0, k) + chars[l] + text.substr(k + 1)
+        }
+        if (O(id).innerText) O(id).innerText = text
+        else O(id).textContent = text
+        if (++count == INTERVAL) {
+            O(id).TM_Flag = false
             clearInterval(iid)
         }
     }
