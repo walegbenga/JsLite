@@ -1171,3 +1171,42 @@ function TextType(id, number, msecs) {
         else $l(id).textContent = str
     }
 }
+
+function MatrixToText(id, msecs) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            MatrixToText(id[j], msecs)
+        return
+    }
+    if (O(id).MT_Flag) return
+    else O(id).MT_Flag = true
+    var html = Html(id)
+    var len = html.length
+    var freq = Math.round(msecs / INTERVAL)
+    var matrix = ''
+    var count = 0
+    var chars = 'ABCDEFGHIHJKLMOPQRSTUVWXYZ' +
+        'abcdefghijklmnopqrstuvwxyz' +
+        '0123456789'
+    for (var j = 0; j < len; ++j) {
+        if (html[j] == '\n' || html[j] == ' ') matrix += html[j]
+        else matrix += chars[Math.floor(Math.random() * chars.length)]
+    }
+    if (O(id).innerText) O(id).innerText = matrix
+    else O(id).textContent = matrix
+    var iid = setInterval(DoMatrixToText, freq)
+
+    function DoMatrixToText() {
+        for (j = 0; j < len / 20; ++j) {
+            var k = Math.floor(Math.random() * len)
+            matrix = matrix.substr(0, k) + html[k] + matrix.substr(k + 1)
+        }
+        if (O(id).innerText) O(id).innerText = matrix
+        else O(id).textContent = matrix
+        if (++count == INTERVAL) {
+            O(id).MT_Flag = false
+            O(id).innerHTML = html
+            clearInterval(iid)
+        }
+    }
+}
