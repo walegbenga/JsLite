@@ -1361,6 +1361,7 @@ function Lightbox(id, col1, col2, opacity, msecs) {
         newdiv.setAttribute('id', 'LB_DIV')
         document.body.appendChild(newdiv)
     }
+
     S(document.body).overflow = HID
     Hide(Array(id, 'LB_DIV'))
     Locate('LB_DIV', ABS, 0, 0)
@@ -1385,4 +1386,15 @@ function Lightbox(id, col1, col2, opacity, msecs) {
             "S(document.body, 'overflow', 'auto')"
         ))
     }
+}
+
+function Opacity(id, percent) {
+    S(id, 'opacity', percent / 100)
+    S(id, 'MozOpacity', percent / 100)
+    S(id, 'KhtmlOpacity', percent / 100)
+    S(id, 'filter', InsVars("alpha(opacity = '#1')", percent))
+}
+
+function FadeOut(id, msecs, interruptible, CB) {
+    Fade(id, 100, 0, msecs, interruptible, CB)
 }
