@@ -1227,9 +1227,7 @@ function TextToMatrix(id, msecs) {
     var len = text.length
     var freq = Math.round(msecs / INTERVAL)
     var count = 0
-    var chars = 'ABCDEFGHIHJKLM$lPQRSTUVWXYZ' +
-        'abcdefghijklmnopqrstuvwxyz' +
-        '0123456789'
+    var chars = 'ABCDEFGHIHJKLM$lPQRSTUVWXYZ' + 'abcdefghijklmnopqrstuvwxyz' + '0123456789'
     var iid = setInterval(DoTextToMatrix, freq)
 
     function DoTextToMatrix() {
@@ -1329,8 +1327,8 @@ function TextRipple(id, number, msecs) {
             TextRipple(id[j], number, msecs)
         return
     }
-    if (O(id).TR_Flag) return
-    else O(id).TR_Flag = true
+    if ($l(id).TR_Flag) return
+    else $l(id).TR_Flag = true
     var html = Html(id)
     var len = html.length
     var freq = msecs / len
@@ -1343,15 +1341,48 @@ function TextRipple(id, number, msecs) {
         for (var j = 0; j < 7; ++j)
             temp += InsVars("<font size='+#1'>#2</font>",
                 4 - Math.abs(j - 3), html.substr(ctr1 + j, 1))
-        O(id).innerHTML = temp + html.substr(ctr1 + j)
+        $l(id).innerHTML = temp + html.substr(ctr1 + j)
         if (++ctr1 == len) {
             ctr1 = 0
             if (++ctr2 == number) {
-                if (O(id).innerText) O(id).innerText = html
-                else O(id).textContent = html
-                O(id).TR_Flag = false
+                if ($l(id).innerText) $l(id).innerText = html
+                else $l(id).textContent = html
+                $l(id).TR_Flag = false
                 clearInterval(iid)
             }
         }
+    }
+}
+
+function Lightbox(id, col1, col2, opacity, msecs) {
+    S(id).cursor = 'pointer'
+    if (!$l('LB_DIV')) {
+        var newdiv = document.createElement('div')
+        newdiv.setAttribute('id', 'LB_DIV')
+        document.body.appendChild(newdiv)
+    }
+    S(document.body).overflow = HID
+    Hide(Array(id, 'LB_DIV'))
+    Locate('LB_DIV', ABS, 0, 0)
+    Resize('LB_DIV', GetWindowWidth(), GetWindowHeight())
+    S('LB_DIV').zIndex = ZINDEX
+    Opacity(id, 0)
+    Position(id, ABS)
+    S(id).zIndex = ++ZINDEX
+    Show(Array(id, 'LB_DIV'))
+    Center(id)
+    Fade('LB_DIV', 0, opacity, msecs)
+    FadeIn(id, msecs, 0)
+    ColorFade('LB_DIV', col1, col2, 'back', msecs, 1)
+    $l(id).onclick = DismissLB
+
+    function DismissLB() {
+        Fade('LB_DIV', opacity, 0, msecs)
+        ColorFade('LB_DIV', col2, col1, 'back', msecs, 1)
+        Chain(Array(
+            InsVars("FadeOut(Array('#1', 'LB_DIV'), #2, 0)", id, msecs),
+            InsVars("Hide(Array('#1', 'LB_DIV'))", id),
+            "S(document.body, 'overflow', 'auto')"
+        ))
     }
 }
