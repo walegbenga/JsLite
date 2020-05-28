@@ -1141,3 +1141,33 @@ function TextScroll(id, dir, number, msecs) {
         }
     }
 }
+
+function TextType(id, number, msecs) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            TextType(id[j], number, msecs)
+        return
+    }
+    if ($l(id).TT_Flag) return
+    else $l(id).TT_Flag = true
+    var html = Html(id)
+    var len = html.length
+    var freq = Math.round(msecs / len)
+    var ctr1 = 0
+    var ctr2 = 0
+    var iid = setInterval(DoTextType, freq)
+
+    function DoTextType() {
+        var str = html.substr(0, ctr1) + '_'
+        if (ctr1++ == len) {
+            ctr1 = 0
+            if (++ctr2 == number) {
+                $l(id).TT_Flag = false
+                clearInterval(iid)
+                str = str.substr(0, len)
+            }
+        }
+        if ($l(id).innerText) $l(id).innerText = str
+        else $l(id).textContent = str
+    }
+}
