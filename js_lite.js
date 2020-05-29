@@ -1565,3 +1565,15 @@ function GetAjaxRequest(id, type, url, args) {
     ajax.send(null)
     return true
 }
+
+function PostAjaxRequest(id, callback, url, args) {
+    var contenttype = 'application/x-www-form-urlencoded'
+    var ajax = new CreateAjaxObject(id, callback)
+    if (!ajax) return false
+    ajax.open('POST', url, true)
+    ajax.setRequestHeader('Content-type', contenttype)
+    ajax.setRequestHeader('Content-length', args.length)
+    ajax.setRequestHeader('Connection', 'close')
+    ajax.send(args)
+    return true
+}
