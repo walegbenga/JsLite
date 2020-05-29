@@ -1624,3 +1624,14 @@ function ValidateEmail(email) {
         right.indexOf('.') == -1) return false
     return true
 }
+
+function ValidatePassword(pass, min, max, upper, lower, dig, punct) {
+    var len = pass.length
+    var valid = true
+    if (len < min || len > max) valid = false
+    else if (upper && !/[A-Z]/.test(pass)) valid = false
+    else if (lower && !/[a-z]/.test(pass)) valid = false
+    else if (dig && !/[0-9]/.test(pass)) valid = false
+    else if (punct && !/[^a-zA-Z0-9]/.test(pass)) valid = false
+    return valid
+}
