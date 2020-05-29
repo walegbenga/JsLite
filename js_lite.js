@@ -1508,3 +1508,51 @@ function PulsateOnMouseover(id, op1, op2, msecs) {
         }
     }
 }
+
+function ProcessCookie(action, name, value, seconds, path, domain, secure) {
+    if (action == 'save') {
+        var date = new Date()
+        date.setTime(date.getTime() + seconds * 1000)
+        var expires = seconds ? '; expires=' + date.toGMTString() : ''
+        path = path ? '; path=' + path : ''
+        domain = domain ? '; domain=' + domain : ''
+        secure = secure ? '; secure=' + secure : ''
+        document.cookie = name + '=' + escape(value) + expires + path
+    } else if (action == 'read') {
+        if (!document.cookie.length) return false
+        else {
+            var start = document.cookie.indexOf(name + '=')
+            if (start == -1) return false
+            else {
+                start += name.length + 1
+                var end = document.cookie.indexOf(';', start)
+                end = (end == -1) ? document.cookie.length : end
+                return unescape(document.cookie.substring(start, end))
+            }
+        }
+    } else if (action == 'erase')
+        ProcessCookie('save', name, '', -60)
+}
+
+function CreateAjaxObject(id, callback) {
+    try {
+        var ajax = new XMLHttpRequest()
+    } catch (e1) {
+        try {
+            ajax = new ActiveXObject("Msxml2.XMLHTTP")
+        } catch (e2) {
+            try {
+                ajax = new ActiveXObject("Microsoft.XMLHTTP")
+            } catch (e3) {
+                ajax = false
+            }
+        }
+    }
+    if (ajax) ajax.onreadystatechange = function() {
+        if (this.readyState == 4 &&
+            this.status == 200 &&
+            this.responseText != null)
+            callback.call(this.responseText)
+    }
+    return ajax
+}
