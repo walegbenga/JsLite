@@ -1682,6 +1682,8 @@ function ValidateCreditCard(number, month, year) {
         if (cclen != 16) return false
     } else if (left == 6011) { // Discover
         if (cclen != 16) return false
+    } else if (left == 5061) { // Verve
+        if (cclen != 19) return false
     } else return false // Unrecognized Card
     for (var j = 1 - (cclen % 2); j < cclen; j += 2)
         if (j < cclen) chksum += number[j] * 1
