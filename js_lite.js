@@ -1708,3 +1708,38 @@ function RollingCopyright(start) {
     date = date.getFullYear()
     return '&copy; ' + start + "-" + date
 }
+
+function CursorTrail(image, length, state) {
+    var w = GetWindowWidth()
+    var h = GetWindowHeight()
+    var c = 'CT_'
+    if (!state) return clearInterval(CT_IID)
+    if (!$l('TT_0')) {
+        for (var j = 0; j < 10; ++j) {
+            var newimg = document.createElement('img')
+            newimg.setAttribute('id', c + j)
+            document.body.appendChild(newimg)
+            Position(newimg, ABS)
+            Opacity(newimg, (j + 1) * 9)
+            newimg.src = image
+            $l(c + j).X = -9999
+            $l(c + j).Y = -9999
+        }
+    }
+    CT_IID = setInterval(DoCurTrail, length)
+
+    function DoCurTrail() {
+        for (var j = 0; j < 10; ++j) {
+            GoTo(c + j, $l(c + j).X + 2, $l(c + j).Y + 2)
+            S(c + j).zIndex = ZINDEX + 1
+            if ($l(c + j).X == MOUSE_X && $l(c + j).Y == MOUSE_Y) Hide(c + j)
+            else Show(c + j)
+            if (j > 0) {
+                $l(c + (j - 1)).X = $l(c + j).X
+                $l(c + (j - 1)).Y = $l(c + j).Y
+            }
+        }
+        $l(c + 9).X = MOUSE_X < (w - 12) ? MOUSE_X : -9999
+        $l(c + 9).Y = MOUSE_Y < (h - 20) ? MOUSE_Y : -9999
+    }
+}
