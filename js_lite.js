@@ -1635,3 +1635,15 @@ function ValidatePassword(pass, min, max, upper, lower, dig, punct) {
     else if (punct && !/[^a-zA-Z0-9]/.test(pass)) valid = false
     return valid
 }
+
+function CleanupString(string, allspaces, alldigs, alltext, allpunct,
+    uptolow, lowtoup, spacestosingle) {
+    if (allspaces) string = string.replace(/[\s]/g, '')
+    if (alldigs) string = string.replace(/[\d]/g, '')
+    if (alltext) string = string.replace(/[a-zA-Z]/g, '')
+    if (allpunct) string = string.replace(/[^\sa-zA-Z0-9]/g, '')
+    if (uptolow) string = string.toLowerCase()
+    if (lowtoup) string = string.toUpperCase()
+    if (spacestosingle) string = string.replace(/[\s]/g, ' ')
+    return string
+}
