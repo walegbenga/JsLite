@@ -1702,3 +1702,9 @@ function ValidateCreditCard(number, month, year) {
         else return true
     }
 }
+
+function RollingCopyright(start) {
+    var date = new Date()
+    date = date.getFullYear()
+    return '&copy; ' + start + "-" + date
+}
