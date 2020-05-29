@@ -1435,34 +1435,76 @@ function Slideshow(id, images, msecs, wait) {
 
 function Billboard(id, objects, random, msecs, wait) {
     var len = objects.length
-    if (!O(id).BB_Ready) {
+    if (!$l(id).BB_Ready) {
         var h = 0
-        O(id).BB_Index = 0
-        O(id).BB_Ready = true
+        $l(id).BB_Index = 0
+        $l(id).BB_Ready = true
         FadeOut(objects.slice(1), 1, 0)
         for (j = 1; j < len; ++j) {
-            h -= H(O(objects[j - 1]))
-            Locate(O(objects[j]), REL, 0, h)
+            h -= H($l(objects[j - 1]))
+            Locate($l(objects[j]), REL, 0, h)
         }
     }
-    O(id).BB_Stop = (wait == 'stop') ? true : false
-    if (!O(id).BB_Stop && !O(id).BB_Flag)
-        O(id).BB_IID = setTimeout(DoBillboard, msecs + wait)
+    $l(id).BB_Stop = (wait == 'stop') ? true : false
+    if (!$l(id).BB_Stop && !$l(id).BB_Flag)
+        $l(id).BB_IID = setTimeout(DoBillboard, msecs + wait)
 
     function DoBillboard() {
-        O(id).BB_Flag = true
-        if (O(id).BB_Stop) {
-            O(id).BB_Flag = false
-            clearTimeout(O(id).BB_IID)
+        $l(id).BB_Flag = true
+        if ($l(id).BB_Stop) {
+            $l(id).BB_Flag = false
+            clearTimeout($l(id).BB_IID)
             return
-        } else FadeOut(objects[O(id).BB_Index], msecs, 0)
+        } else FadeOut(objects[$l(id).BB_Index], msecs, 0)
         if (random) {
-            var rand = O(id).BB_Index
-            while (rand == O(id).BB_Index)
+            var rand = $l(id).BB_Index
+            while (rand == $l(id).BB_Index)
                 rand = Math.floor(Math.random() * len)
-            O(id).BB_Index = rand
-        } else O(id).BB_Index = ++O(id).BB_Index % len
-        FadeIn(objects[O(id).BB_Index], msecs, 0)
-        O(id).BB_IID = setTimeout(DoBillboard, msecs + wait)
+            $l(id).BB_Index = rand
+        } else $l(id).BB_Index = ++$l(id).BB_Index % len
+        FadeIn(objects[$l(id).BB_Index], msecs, 0)
+        $l(id).BB_IID = setTimeout(DoBillboard, msecs + wait)
+    }
+}
+
+function PlaySound(id, file, loop) {
+    Resize(id, 0, 0)
+    Locate(id, ABS, 0, 0)
+    if (loop == 'stop') $l(id).innerHTML = ''
+    else $l(id).innerHTML =
+        InsVars("<embed src='#1' hidden='true' " + "autostart='true' loop='#2' />", file, loop)
+}
+
+function PulsateOnMouseover(id, op1, op2, msecs) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            PulsateOnMouseover(id[j], op1, op2, msecs)
+        return
+    }
+    var finish = false
+    var iid
+    Opacity(id, op1)
+    $l(id).FA_Level = op1
+    $l(id).onmouseover = PulsateOn
+    $l(id).onmouseout = function() { finish = true }
+
+    function PulsateOn() {
+        var faded = false
+        finish = false
+        if (iid) clearInterval(iid)
+        iid = setInterval(DoPulsate, INTERVAL)
+
+        function DoPulsate() {
+            if (!faded && $l(id).FA_Level == op1) {
+                if (finish) clearInterval(iid)
+                else {
+                    Fade(id, op1, op2, msecs / 2, 0)
+                    faded = true
+                }
+            } else if (!$l(id).FA_Flag) {
+                Fade(id, op2, op1, msecs / 2, 0)
+                faded = false
+            }
+        }
     }
 }
