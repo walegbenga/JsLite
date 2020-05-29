@@ -1612,3 +1612,15 @@ function ResizeTextarea(id, min, max) {
             --$l(id).rows
     }
 }
+
+function ValidateEmail(email) {
+    var at = email.indexOf('@')
+    if (at == -1 || /[^\w\-\.\@\_\+]/.test(email)) return false
+    var left = email.substr(0, at)
+    var right = email.substr(at + 1)
+    var llen = left.length
+    var rlen = right.length
+    if (llen < 1 || llen > 64 || rlen < 4 || rlen > 254 ||
+        right.indexOf('.') == -1) return false
+    return true
+}
