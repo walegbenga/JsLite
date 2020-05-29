@@ -1647,3 +1647,58 @@ function CleanupString(string, allspaces, alldigs, alltext, allpunct,
     if (spacestosingle) string = string.replace(/[\s]/g, ' ')
     return string
 }
+
+function ValidateCreditCard(number, month, year) {
+    number += ''
+    month += ''
+    year += ''
+    number = CleanupString(number, true, false, true, true)
+    month = CleanupString(month, true, false, true, true)
+    year = CleanupString(year, true, false, true, true)
+    var left = number.substr(0, 4)
+    var cclen = number.length
+    var chksum = 0
+    if (left >= 3000 && left <= 3059 ||
+        left >= 3600 && left <= 3699 ||
+        left >= 3800 && left <= 3889) { // Diners Club
+        if (cclen != 14) return false
+    } else if (left >= 3088 && left <= 3094 ||
+        left >= 3096 && left <= 3102 ||
+        left >= 3112 && left <= 3120 ||
+        left >= 3158 && left <= 3159 ||
+        left >= 3337 && left <= 3349 ||
+        left >= 3528 && left <= 3589) { // JCB
+        if (cclen != 16) return false
+    } else if (left >= 3400 && left <= 3499 ||
+        left >= 3700 && left <= 3799) { // American Express
+        if (cclen != 15) return false
+    } else if (left >= 3890 && left <= 3899) { // Carte Blanche
+        if (cclen != 14) return false
+    } else if (left >= 4000 && left <= 4999) { // Visa
+        if (cclen != 13 && cclen != 16) return false
+    } else if (left >= 5100 && left <= 5599) { // MasterCard
+        if (cclen != 16) return false
+    } else if (left == 5610) { // Australian BankCard
+        if (cclen != 16) return false
+    } else if (left == 6011) { // Discover
+        if (cclen != 16) return false
+    } else return false // Unrecognized Card
+    for (var j = 1 - (cclen % 2); j < cclen; j += 2)
+        if (j < cclen) chksum += number[j] * 1
+    for (j = cclen % 2; j < cclen; j += 2) {
+        if (j < cclen) {
+            d = number[j] * 2
+            chksum += d < 10 ? d : d - 9
+        }
+    }
+    if (chksum % 10 != 0) return false
+    var date = new Date()
+    date.setTime(date.getTime())
+    if (year.length == 4) year = year.substr(2, 2)
+    if (year > 50) return false
+    else if (year < (date.getFullYear() - 2000)) return false
+    else if ((date.getMonth() + 1) > month
+        return false
+        else return true
+    }
+}
