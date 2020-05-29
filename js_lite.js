@@ -1556,3 +1556,12 @@ function CreateAjaxObject(id, callback) {
     }
     return ajax
 }
+
+function GetAjaxRequest(id, type, url, args) {
+    var nocache = '&nocache=' + Math.random() * 1000000
+    var ajax = new CreateAjaxObject(id, type)
+    if (!ajax) return false
+    ajax.open('GET', url + '?' + args + nocache, true)
+    ajax.send(null)
+    return true
+}
