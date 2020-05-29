@@ -1577,3 +1577,19 @@ function PostAjaxRequest(id, callback, url, args) {
     ajax.send(args)
     return true
 }
+
+function FrameBust(message) {
+    if (top != self) {
+        if (message) {
+            if (confirm(message))
+                top.location.replace(self.location.href)
+        } else top.location.replace(self.location.href)
+    }
+}
+
+function ProtectEmail() {
+    var a = ''
+    for (var j = 0; j < arguments.length; ++j)
+        a += arguments[j]
+    return "<a hr" + "ef" + "='mai" + "lt" + "o:" + a + "'>" + a + "</a>"
+}
