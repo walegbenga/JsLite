@@ -1743,3 +1743,46 @@ function CursorTrail(image, length, state) {
         $l(c + 9).Y = MOUSE_Y < (h - 20) ? MOUSE_Y : -9999
     }
 }
+
+function TouchEnable(state) {
+    var db = document.body
+    if (state) {
+        var iid = null
+        var flag = false
+        PreventAction(db, 'both', true)
+        db.onmousedown = StartTE
+        db.onmouseup = StopTE
+    } else {
+        PreventAction(db, 'both', false)
+        db.onmousedown = ''
+        db.onmouseup = ''
+        return
+    }
+
+    function StartTE(e) {
+        if (!flag) {
+            var oldmousex = MOUSE_X
+            var oldmousey = MOUSE_Y
+            var tempmousex = MOUSE_X
+            var tempmousey = MOUSE_Y
+            flag = true
+            iid = setInterval(DoTE, 10)
+        }
+        return false
+
+        function DoTE() {
+            if (MOUSE_DOWN && MOUSE_IN) {
+                if (MOUSE_X != tempmousex || MOUSE_Y != tempmousey) {
+                    tempmousex = MOUSE_X
+                    tempmousey = MOUSE_Y
+                    window.scrollBy(oldmousex - MOUSE_X, oldmousey - MOUSE_Y)
+                }
+            } else StopTE()
+        }
+    }
+
+    function StopTE() {
+        flag = false
+        clearInterval(iid)
+    }
+}
