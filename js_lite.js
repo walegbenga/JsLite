@@ -1593,3 +1593,22 @@ function ProtectEmail() {
         a += arguments[j]
     return "<a hr" + "ef" + "='mai" + "lt" + "o:" + a + "'>" + a + "</a>"
 }
+
+function ResizeTextarea(id, min, max) {
+    if (id instanceof Array) {
+        for (var j = 0; j < id.length; ++j)
+            ResizeTextarea(id[j], min, max)
+        return
+    }
+    min = min ? min : 0
+    max = max ? max : 10
+    $l(id).onmouseup = DoResizeTextarea
+    $l(id).onkeyup = DoResizeTextarea
+
+    function DoResizeTextarea() {
+        while ($l(id).scrollHeight > $l(id).clientHeight && $l(id).rows < max)
+            ++$l(id).rows
+        while ($l(id).scrollHeight < $l(id).clientHeight && $l(id).rows > min)
+            --$l(id).rows
+    }
+}
